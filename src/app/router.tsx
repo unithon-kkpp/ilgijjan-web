@@ -13,7 +13,6 @@ import DiaryNewWeatherPage from '@/pages/DiaryNewWeatherPage'
 import DiaryNewMoodPage from '@/pages/DiaryNewMoodPage'
 import DiaryNewWritePage from '@/pages/DiaryNewWritePage'
 import ProfilePage from '@/pages/ProfilePage'
-import BillingPage from '@/pages/BillingPage'
 
 // 로그인이 필요한 라우트를 감싸는 가드
 function PrivateRoute() {
@@ -40,7 +39,6 @@ export const router = createBrowserRouter([
       { path: '/diary/new/mood', element: <DiaryNewMoodPage /> },
       { path: '/diary/new/write', element: <DiaryNewWritePage /> },
       { path: '/profile', element: <ProfilePage /> },
-      { path: '/billing', element: <BillingPage /> },
     ],
   },
 ])

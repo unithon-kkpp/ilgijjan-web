@@ -71,10 +71,6 @@ src/
 │   │   ├── api/likeApi.ts
 │   │   ├── components/LikeButton.tsx
 │   │   └── hooks/useLike.ts
-│   ├── billing/
-│   │   ├── api/billingApi.ts
-│   │   ├── components/ProductCard.tsx
-│   │   └── hooks/useBilling.ts
 │   └── storage/
 │       ├── api/storageApi.ts
 │       └── hooks/useImageUpload.ts
@@ -89,8 +85,7 @@ src/
 │   ├── DiaryNewWeatherPage.tsx
 │   ├── DiaryNewMoodPage.tsx
 │   ├── DiaryNewWritePage.tsx
-│   ├── ProfilePage.tsx
-│   └── BillingPage.tsx
+│   └── ProfilePage.tsx
 └── shared/
     ├── components/
     │   ├── ui/
@@ -121,7 +116,6 @@ src/
 /diary/new/mood        → DiaryNewMoodPage
 /diary/new/write       → DiaryNewWritePage
 /profile               → ProfilePage
-/billing               → BillingPage
 
 ## API 도메인
 - AUTH: /auth/login, /auth/logout, /auth/withdraw, /auth/reissue
@@ -129,7 +123,6 @@ src/
 - LIKE: /diaries/{diaryId}/likes
 - USER: /users/me, /users/me/name, /users/me/character, /users/me/notification
 - STORAGE: /storage/upload
-- BILLING: /billing/products, /billing/verify
 - FCM: /fcm/tokens
 
 ## 일기 작성 멀티스텝

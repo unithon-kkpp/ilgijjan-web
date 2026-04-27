@@ -1,3 +1,12 @@
+@import url('https://hangeul.pstatic.net/hangeul_static/css/nanum-square-round.css');
+
+@font-face {
+  font-family: 'AndongKaturi';
+  src: url('/fonts/Katuri.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+}
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;

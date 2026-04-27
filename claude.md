@@ -1,9 +1,9 @@
 # 일기짠 웹 프론트엔드
 
 ## 프로젝트 개요
-아동 AI 일기장 앱의 웹 버전. 백엔드는 Spring Boot로 완성되어 있음.
-Base URL: https://ilgijjan.store/api
-인증: accessToken을 Authorization 헤더에 Bearer로 첨부. 열린 자물쇠 API 제외.
+- 아동 AI 일기장 앱의 웹 버전. 백엔드는 Spring Boot로 완성되어 있음.
+- Base URL: https://ilgijjan.store/api
+- 인증: accessToken을 Authorization 헤더에 Bearer로 첨부. 열린 자물쇠 API 제외.
 
 ## 기술 스택
 - Vite + React 18 + TypeScript
@@ -129,11 +129,11 @@ src/
 - STORAGE: /storage/upload
 
 ## 일기 작성 멀티스텝
-Jotai diaryDraftAtom에 단계별 저장 후 마지막에 한번에 POST /diaries
-1단계 /diary/new/photo   → imageUrl
-2단계 /diary/new/weather → weather
-3단계 /diary/new/mood    → mood
-4단계 /diary/new/write   → content → API 호출
+- Jotai diaryDraftAtom에 단계별 저장 후 마지막에 한번에 POST /diaries
+- 1단계 /diary/new/photo   → imageUrl
+- 2단계 /diary/new/weather → weather
+- 3단계 /diary/new/mood    → mood
+- 4단계 /diary/new/write   → content → API 호출
 
 ## 작업 규칙
 - 새 파일/폴더 생성 시 이 문서의 패키지 구조를 업데이트할 것

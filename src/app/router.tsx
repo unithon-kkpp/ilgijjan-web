@@ -3,6 +3,7 @@ import { useAtomValue } from 'jotai'
 import { currentUserAtom } from './store'
 
 import LoginPage from '@/pages/LoginPage'
+import KakaoCallbackPage from '@/pages/KakaoCallbackPage'
 import OnboardingNamePage from '@/pages/OnboardingNamePage'
 import OnboardingFriendsPage from '@/pages/OnboardingFriendsPage'
 import DiaryListPage from '@/pages/DiaryListPage'
@@ -24,6 +25,7 @@ function PrivateRoute() {
 export const router = createBrowserRouter([
   // 인증 불필요
   { path: '/login', element: <LoginPage /> },
+  { path: '/oauth/kakao', element: <KakaoCallbackPage /> },
   { path: '/onboarding/name', element: <OnboardingNamePage /> },
   { path: '/onboarding/friends', element: <OnboardingFriendsPage /> },
 

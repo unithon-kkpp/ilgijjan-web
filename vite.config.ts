@@ -9,4 +9,13 @@ export default defineConfig({
       '@': resolve(__dirname, 'src'),
     },
   },
+  server: {
+    proxy: {
+      '/api': {
+        target: 'https://ilgijjan.store',
+        changeOrigin: true,
+        secure: true,
+      },
+    },
+  },
 })

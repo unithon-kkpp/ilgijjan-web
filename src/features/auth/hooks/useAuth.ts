@@ -8,6 +8,13 @@ export function useAuth() {
   const setCurrentUser = useSetAtom(currentUserAtom)
   const navigate = useNavigate()
 
+  const loginWithKakao = () => {
+    window.Kakao.Auth.authorize({
+      redirectUri: `${window.location.origin}/oauth/kakao`,
+      throughTalk: false,
+    })
+  }
+
   const logout = async () => {
     await authApi.logout()
     tokenStorage.remove()
@@ -15,5 +22,5 @@ export function useAuth() {
     navigate('/login', { replace: true })
   }
 
-  return { logout }
+  return { loginWithKakao, logout }
 }

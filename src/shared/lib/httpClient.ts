@@ -2,7 +2,7 @@ import axios from 'axios'
 import { tokenStorage } from './tokenStorage'
 
 export const httpClient = axios.create({
-  baseURL: 'https://ilgijjan.store/api',
+  baseURL: '/api',
   headers: {
     'Content-Type': 'application/json',
   },

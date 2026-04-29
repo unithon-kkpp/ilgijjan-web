@@ -8,7 +8,6 @@ export const httpClient = axios.create({
   },
 })
 
-// 요청 인터셉터: 모든 요청에 accessToken 자동 첨부
 httpClient.interceptors.request.use((config) => {
   const token = tokenStorage.get()
   if (token) {
@@ -17,14 +16,26 @@ httpClient.interceptors.request.use((config) => {
   return config
 })
 
-// 응답 인터셉터: 401 → 로그인 페이지로 이동
 httpClient.interceptors.response.use(
   (response) => response,
-  (error) => {
-    if (error.response?.status === 401) {
-      tokenStorage.remove()
-      window.location.href = '/login'
+  async (error) => {
+    const originalRequest = error.config
+
+    if (error.response?.status === 401 && !originalRequest._retry) {
+      originalRequest._retry = true
+      try {
+        const res = await httpClient.post<{ accessToken: string }>('/auth/reissue')
+        tokenStorage.set(res.data.accessToken)
+        originalRequest.headers.Authorization = `Bearer ${res.data.accessToken}`
+        return httpClient(originalRequest)
+      } catch {
+        tokenStorage.clear()
+        if (window.location.pathname !== '/login') {
+          window.location.href = '/login'
+        }
+      }
     }
+
     return Promise.reject(error)
   }
 )

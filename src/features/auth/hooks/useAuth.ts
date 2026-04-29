@@ -9,17 +9,24 @@ export function useAuth() {
   const navigate = useNavigate()
 
   const loginWithKakao = () => {
+    if (!window.Kakao?.isInitialized()) {
+      const key = import.meta.env.VITE_KAKAO_APP_KEY
+      if (key) window.Kakao.init(key)
+    }
+
     window.Kakao.Auth.authorize({
       redirectUri: `${window.location.origin}/oauth/kakao`,
-      throughTalk: false,
     })
   }
 
   const logout = async () => {
-    await authApi.logout()
-    tokenStorage.remove()
-    setCurrentUser(null)
-    navigate('/login', { replace: true })
+    try {
+      await authApi.logout()
+    } finally {
+      tokenStorage.clear()
+      setCurrentUser(null)
+      navigate('/login', { replace: true })
+    }
   }
 
   return { loginWithKakao, logout }

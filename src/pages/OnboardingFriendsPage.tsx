@@ -1,5 +1,6 @@
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
+import { useQueryClient } from '@tanstack/react-query'
 import { userApi } from '@/features/user/api/userApi'
 
 type Character = 'RERE' | 'DODO' | 'MIMI'
@@ -72,6 +73,9 @@ const CHARACTERS: {
 
 export default function OnboardingFriendsPage() {
   const navigate = useNavigate()
+  const location = useLocation()
+  const queryClient = useQueryClient()
+  const returnTo = (location.state as { returnTo?: string } | null)?.returnTo
   const [selected, setSelected] = useState<Character | null>(null)
   const [loading, setLoading] = useState(false)
 
@@ -80,7 +84,8 @@ export default function OnboardingFriendsPage() {
     setLoading(true)
     try {
       await userApi.updateCharacter({ character: selected })
-      navigate('/', { replace: true })
+      queryClient.invalidateQueries({ queryKey: ['user', 'me'] })
+      navigate(returnTo ?? '/', { replace: true })
     } catch (e) {
       console.error('캐릭터 저장 실패:', e)
     } finally {

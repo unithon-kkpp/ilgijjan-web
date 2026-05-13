@@ -1,9 +1,13 @@
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
+import { useQueryClient } from '@tanstack/react-query'
 import { userApi } from '@/features/user/api/userApi'
 
 export default function OnboardingNamePage() {
   const navigate = useNavigate()
+  const location = useLocation()
+  const queryClient = useQueryClient()
+  const returnTo = (location.state as { returnTo?: string } | null)?.returnTo
   const [name, setName] = useState('')
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
@@ -14,7 +18,8 @@ export default function OnboardingNamePage() {
     setError('')
     try {
       await userApi.updateName({ name: name.trim() })
-      navigate('/onboarding/friends', { replace: true })
+      queryClient.invalidateQueries({ queryKey: ['user', 'me'] })
+      navigate(returnTo ?? '/onboarding/friends', { replace: true })
     } catch (e: any) {
       const status = e?.response?.status
       if (status === 409) {

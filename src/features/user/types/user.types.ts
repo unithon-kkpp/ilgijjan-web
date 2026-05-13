@@ -1,8 +1,10 @@
+export type Character = 'DODO' | 'RERE' | 'MIMI'
+
 export interface User {
-  id: number
-  name: string
-  character: string
-  notificationEnabled: boolean
+  name: string | null
+  character: Character | null
+  isNotificationEnabled: boolean
+  noteCount: number
 }
 
 export interface UpdateNameRequest {
@@ -10,5 +12,5 @@ export interface UpdateNameRequest {
 }
 
 export interface UpdateCharacterRequest {
-  character: string
+  character: Character
 }

@@ -1,6 +1,5 @@
 import { createBrowserRouter, Navigate, Outlet } from 'react-router-dom'
-import { useAtomValue } from 'jotai'
-import { currentUserAtom } from './store'
+import { tokenStorage } from '@/shared/lib/tokenStorage'
 
 import MobileLayout from '@/shared/components/layout/MobileLayout'
 import LoginPage from '@/pages/LoginPage'
@@ -17,8 +16,7 @@ import DiaryNewWritePage from '@/pages/DiaryNewWritePage'
 import ProfilePage from '@/pages/ProfilePage'
 
 function PrivateRoute() {
-  const user = useAtomValue(currentUserAtom)
-  if (!user) return <Navigate to="/login" replace />
+  if (!tokenStorage.get()) return <Navigate to="/login" replace />
   return <Outlet />
 }
 

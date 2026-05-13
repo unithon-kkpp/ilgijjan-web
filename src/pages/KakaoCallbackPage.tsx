@@ -1,10 +1,7 @@
 import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { useSetAtom } from 'jotai'
 import { authApi } from '@/features/auth/api/authApi'
-import { userApi } from '@/features/user/api/userApi'
 import { tokenStorage } from '@/shared/lib/tokenStorage'
-import { currentUserAtom } from '@/app/store'
 
 async function exchangeCodeForToken(code: string): Promise<string> {
   const res = await fetch('https://kauth.kakao.com/oauth/token', {
@@ -24,7 +21,6 @@ async function exchangeCodeForToken(code: string): Promise<string> {
 
 export default function KakaoCallbackPage() {
   const navigate = useNavigate()
-  const setCurrentUser = useSetAtom(currentUserAtom)
 
   useEffect(() => {
     const code = new URLSearchParams(window.location.search).get('code')
@@ -38,12 +34,10 @@ export default function KakaoCallbackPage() {
         tokenStorage.setKakao(kakaoAccessToken)
         return authApi.login({ provider: 'KAKAO', accessToken: kakaoAccessToken })
       })
-      .then(async (res) => {
+      .then((res) => {
         tokenStorage.set(res.accessToken)
         tokenStorage.setRefresh(res.refreshToken)
-        const user = await userApi.getMe()
-        setCurrentUser(user)
-        navigate(user.name ? '/' : '/onboarding/name', { replace: true })
+        navigate('/', { replace: true })
       })
       .catch((err) => {
         console.error('로그인 실패:', err)

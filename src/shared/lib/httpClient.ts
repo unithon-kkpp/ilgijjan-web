@@ -17,10 +17,14 @@ httpClient.interceptors.request.use((config) => {
   return config
 })
 
-// 응답 인터셉터: 401 → 로그인 페이지로 이동
+// 응답 인터셉터: 콘솔 로깅 + 401 → 로그인 페이지로 이동
 httpClient.interceptors.response.use(
-  (response) => response,
+  (response) => {
+    console.log(`[API] ${response.config.method?.toUpperCase()} ${response.config.url}`, response.data)
+    return response
+  },
   (error) => {
+    console.error(`[API Error] ${error.config?.method?.toUpperCase()} ${error.config?.url}`, error.response?.data ?? error.message)
     if (error.response?.status === 401) {
       tokenStorage.remove()
       window.location.href = '/login'

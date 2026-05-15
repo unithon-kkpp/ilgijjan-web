@@ -40,7 +40,7 @@ export default function ProfilePage() {
   const { data: user, isLoading } = useUser()
 
   if (isLoading || !user) {
-    return <div className="w-full min-h-screen bg-white" />
+    return <div className="w-full flex-1 bg-white" />
   }
 
   const theme = user.character ? CHARACTER_THEME[user.character] : null
@@ -50,16 +50,16 @@ export default function ProfilePage() {
     navigate('/onboarding/name', { state: { returnTo: '/profile' }, replace: true })
 
   return (
-    <div className="w-full min-h-screen flex flex-col bg-white">
+    <div className="w-full flex flex-1 flex-col bg-white">
       {/* Header */}
-      <header className="h-14 flex items-center px-4">
+      <header className="h-14 shrink-0 flex items-center px-4">
         <button onClick={() => navigate(-1)} aria-label="뒤로가기">
           <ChevronLeftIcon />
         </button>
       </header>
 
       {/* Avatar */}
-      <div className="flex flex-col items-center">
+      <div className="shrink-0 flex flex-col items-center">
         <button
           onClick={goToCharacterEdit}
           className="relative"
@@ -129,7 +129,7 @@ export default function ProfilePage() {
         className="mt-10 flex-1 w-full flex flex-col"
         style={{ backgroundColor: theme?.panelBg ?? '#f9f9f9' }}
       >
-        <div className="px-12 pt-12 flex-1">
+        <div className="px-12 pt-12 flex-1 shrink-0">
           {/* 알림 */}
           <p
             className="text-[10px] tracking-wide"
@@ -165,7 +165,7 @@ export default function ProfilePage() {
         </div>
 
         {/* contact */}
-        <div className="flex justify-center pb-10">
+        <div className="shrink-0 flex justify-center pb-10 pt-10">
           <div
             className="flex items-center justify-center rounded-full bg-white"
             style={{

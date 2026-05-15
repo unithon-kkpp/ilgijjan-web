@@ -46,7 +46,7 @@ export default function KakaoCallbackPage() {
   }, [])
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[#eef9ff]">
+    <div className="h-full flex items-center justify-center bg-[#eef9ff]">
       <div className="h-10 w-10 animate-spin rounded-full border-4 border-gray-200 border-t-yellow-400" />
     </div>
   )

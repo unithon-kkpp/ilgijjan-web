@@ -9,6 +9,7 @@ import OnboardingFriendsPage from '@/pages/OnboardingFriendsPage'
 import DiaryListPage from '@/pages/DiaryListPage'
 import PublicFeedPage from '@/pages/PublicFeedPage'
 import DiaryDetailPage from '@/pages/DiaryDetailPage'
+import DiaryNewEntryPage from '@/pages/DiaryNewEntryPage'
 import DiaryNewPhotoPage from '@/pages/DiaryNewPhotoPage'
 import DiaryNewWeatherPage from '@/pages/DiaryNewWeatherPage'
 import DiaryNewMoodPage from '@/pages/DiaryNewMoodPage'
@@ -37,6 +38,7 @@ export const router = createBrowserRouter([
           { path: '/', element: <DiaryListPage /> },
           { path: '/feed', element: <PublicFeedPage /> },
           { path: '/diary/:id', element: <DiaryDetailPage /> },
+          { path: '/diary/new', element: <DiaryNewEntryPage /> },
           { path: '/diary/new/photo', element: <DiaryNewPhotoPage /> },
           { path: '/diary/new/weather', element: <DiaryNewWeatherPage /> },
           { path: '/diary/new/mood', element: <DiaryNewMoodPage /> },

@@ -6,5 +6,5 @@ interface DiaryCardProps {
 }
 
 export default function DiaryCard({ diary, onClick }: DiaryCardProps) {
-  return <div onClick={onClick}>{diary.content}</div>
+  return <div onClick={onClick}>{diary.text ?? diary.photoUrl}</div>
 }

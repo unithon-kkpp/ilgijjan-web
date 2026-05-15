@@ -5,5 +5,5 @@ interface DiaryDetailProps {
 }
 
 export default function DiaryDetail({ diary }: DiaryDetailProps) {
-  return <div>{diary.content}</div>
+  return <div>{diary.text ?? diary.photoUrl}</div>
 }

@@ -1,7 +1,10 @@
 import { useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { useQueryClient } from '@tanstack/react-query'
+import { useSetAtom } from 'jotai'
 import { userApi } from '@/features/user/api/userApi'
+import type { User } from '@/features/user/types/user.types'
+import { currentUserAtom } from '@/app/store'
 
 type Character = 'RERE' | 'DODO' | 'MIMI'
 
@@ -75,6 +78,7 @@ export default function OnboardingFriendsPage() {
   const navigate = useNavigate()
   const location = useLocation()
   const queryClient = useQueryClient()
+  const setCurrentUser = useSetAtom(currentUserAtom)
   const returnTo = (location.state as { returnTo?: string } | null)?.returnTo
   const [selected, setSelected] = useState<Character | null>(null)
   const [loading, setLoading] = useState(false)
@@ -84,7 +88,12 @@ export default function OnboardingFriendsPage() {
     setLoading(true)
     try {
       await userApi.updateCharacter({ character: selected })
-      queryClient.invalidateQueries({ queryKey: ['user', 'me'] })
+      // React Query 캐시 즉시 반영 (refetch 없이)
+      queryClient.setQueryData<User>(['user', 'me'], (old) =>
+        old ? { ...old, character: selected } : old,
+      )
+      // Jotai atom도 동기 업데이트
+      setCurrentUser((prev) => (prev ? { ...prev, character: selected } : null))
       navigate(returnTo ?? '/', { replace: true })
     } catch (e) {
       console.error('캐릭터 저장 실패:', e)
@@ -95,7 +104,7 @@ export default function OnboardingFriendsPage() {
 
   return (
     <div
-      className="w-full min-h-screen flex flex-col items-center justify-center gap-8"
+      className="w-full h-full flex flex-col items-center justify-center gap-8"
       style={{ backgroundColor: '#faf9f5' }}
     >
       {/* 제목 */}

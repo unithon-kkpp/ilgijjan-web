@@ -174,7 +174,7 @@ function DiaryRow({ item, onClick }: { item: DiaryListItem; onClick: () => void 
       {/* hover 배경 — 레이아웃 영향 없이 가로로 넓게 띄우려고 absolute 레이어로 분리. -z-10 으로 콘텐츠 뒤에 깔림 */}
       <span
         aria-hidden
-        className="pointer-events-none absolute -inset-x-5 -inset-y-2 -z-10 rounded-[12px] transition-colors duration-150 ease-out group-hover:bg-[rgba(145,204,255,0.15)]"
+        className="pointer-events-none absolute -inset-x-5 -inset-y-2 -z-10 rounded-[12px] transition-colors duration-150 ease-out group-hover:bg-black/5 group-active:bg-black/10"
       />
       <div
         className="shrink-0 rounded-[10px] overflow-hidden"
@@ -225,7 +225,7 @@ function PendingDiaryRow({ item, onClick }: { item: DiaryListItem; onClick: () =
     >
       <span
         aria-hidden
-        className="pointer-events-none absolute -inset-x-5 -inset-y-2 -z-10 rounded-[12px] transition-colors duration-150 ease-out group-hover:bg-[rgba(145,204,255,0.15)]"
+        className="pointer-events-none absolute -inset-x-5 -inset-y-2 -z-10 rounded-[12px] transition-colors duration-150 ease-out group-hover:bg-black/5 group-active:bg-black/10"
       />
       <div
         className="shrink-0 rounded-[10px] flex items-center justify-center"
@@ -307,7 +307,7 @@ export default function DiaryListPage() {
         {/* 상단 설정 아이콘 */}
         <div className="shrink-0 flex items-center px-[24px] pt-[20px] pb-1">
           <button
-            className="rounded-full p-2 -m-2 transition-all duration-150 ease-out hover:bg-[rgba(145,204,255,0.15)]"
+            className="rounded-full p-2 -m-2 transition-all duration-150 ease-out hover:bg-black/5 active:bg-black/10"
             onClick={() => navigate('/profile')}
             aria-label="설정"
           >

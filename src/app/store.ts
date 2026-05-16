@@ -16,3 +16,14 @@ export const emptyDiaryDraft: DiaryDraft = {
 
 // 일기 작성 멀티스텝 임시 저장
 export const diaryDraftAtom = atom<DiaryDraft>(emptyDiaryDraft)
+
+export type ToastType = 'success' | 'error' | 'info'
+
+export interface ToastItem {
+  id: number
+  message: string
+  type: ToastType
+}
+
+// 전역 토스트 큐 — 페이지를 이동해도 살아남아야 하므로 atom 으로 관리
+export const toastsAtom = atom<ToastItem[]>([])

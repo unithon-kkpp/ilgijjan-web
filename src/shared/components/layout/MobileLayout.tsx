@@ -1,4 +1,5 @@
 import { Outlet } from 'react-router-dom'
+import ToastContainer from '@/shared/components/ui/ToastContainer'
 
 const FRAME_WIDTH = 390
 const FRAME_HEIGHT = 852
@@ -19,6 +20,7 @@ export default function MobileLayout() {
         }}
       >
         <Outlet />
+        <ToastContainer />
       </div>
     </div>
   )

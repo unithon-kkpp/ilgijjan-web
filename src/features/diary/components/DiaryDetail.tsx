@@ -631,7 +631,7 @@ export default function DiaryDetail({ diary }: DiaryDetailProps) {
       {/* 헤더 — 뒤로가기 + 휴지통 */}
       <div className="shrink-0 flex items-center justify-between px-5 pt-5 pb-2">
         <button
-          className="rounded-full p-2 -m-2 transition-all duration-150 ease-out hover:bg-[rgba(145,204,255,0.15)]"
+          className="rounded-full p-2 -m-2 transition-all duration-150 ease-out hover:bg-black/5 active:bg-black/10"
           onClick={() => navigate(-1)}
           aria-label="뒤로가기"
         >
@@ -639,7 +639,7 @@ export default function DiaryDetail({ diary }: DiaryDetailProps) {
         </button>
         {diary.isOwner ? (
           <button
-            className="rounded-full p-2 -m-2 transition-all duration-150 ease-out hover:bg-[rgba(145,204,255,0.15)]"
+            className="rounded-full p-2 -m-2 transition-all duration-150 ease-out hover:bg-black/5 active:bg-black/10"
             onClick={() => setDeleteConfirmOpen(true)}
             aria-label="삭제"
           >

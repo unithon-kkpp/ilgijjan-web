@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useUser } from '@/features/user/hooks/useUser'
 import { useDiaries } from '@/features/diary/hooks/useDiaries'
@@ -93,16 +93,41 @@ function FilterPicker({
 
   const items = type === 'year' ? years : months
 
+  // closing 동안 exit 애니메이션 재생 → 패널 slide 끝나면 onClose 호출해 unmount
+  const [closing, setClosing] = useState(false)
+
+  function requestClose() {
+    if (!closing) setClosing(true)
+  }
+
+  function handlePanelAnimationEnd() {
+    if (closing) onClose()
+  }
+
+  // ESC = 닫기
+  useEffect(() => {
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        e.preventDefault()
+        requestClose()
+      }
+    }
+    window.addEventListener('keydown', onKeyDown)
+    return () => window.removeEventListener('keydown', onKeyDown)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
   return (
     // absolute → MobileLayout의 relative 컨테이너(390px) 기준으로 배치
     <div
-      className="absolute inset-0 z-50 flex items-end"
+      className={`absolute inset-0 z-50 flex items-end ${closing ? 'animate-fade-out' : 'animate-fade-in'}`}
       style={{ backgroundColor: 'rgba(0,0,0,0.35)' }}
-      onClick={onClose}
+      onClick={requestClose}
     >
       <div
-        className="w-full bg-white rounded-t-[24px] overflow-hidden"
+        className={`w-full bg-white rounded-t-[24px] overflow-hidden ${closing ? 'animate-slide-down-modal' : 'animate-slide-up-modal'}`}
         onClick={(e) => e.stopPropagation()}
+        onAnimationEnd={handlePanelAnimationEnd}
       >
         {/* 핸들 바 */}
         <div className="flex justify-center pt-3 pb-1">
@@ -120,7 +145,7 @@ function FilterPicker({
               key={item}
               onClick={() => {
                 onChange(item)
-                onClose()
+                requestClose()
               }}
               className="w-full py-[14px] text-center"
               style={{
@@ -142,7 +167,15 @@ function FilterPicker({
 
 function DiaryRow({ item, onClick }: { item: DiaryListItem; onClick: () => void }) {
   return (
-    <button onClick={onClick} className="flex w-full items-start gap-4 text-left">
+    <button
+      onClick={onClick}
+      className="group relative z-0 flex w-full items-start gap-4 text-left"
+    >
+      {/* hover 배경 — 레이아웃 영향 없이 가로로 넓게 띄우려고 absolute 레이어로 분리. -z-10 으로 콘텐츠 뒤에 깔림 */}
+      <span
+        aria-hidden
+        className="pointer-events-none absolute -inset-x-5 -inset-y-2 -z-10 rounded-[12px] transition-colors duration-150 ease-out group-hover:bg-[rgba(145,204,255,0.15)]"
+      />
       <div
         className="shrink-0 rounded-[10px] overflow-hidden"
         style={{ width: 128, height: 128, backgroundColor: '#e8e8e8' }}
@@ -186,7 +219,14 @@ function DiaryRow({ item, onClick }: { item: DiaryListItem; onClick: () => void 
 // PENDING(생성 중) 일기는 썸네일 없이 '생성중' 표시. 클릭하면 폴링 화면으로 이동
 function PendingDiaryRow({ item, onClick }: { item: DiaryListItem; onClick: () => void }) {
   return (
-    <button onClick={onClick} className="flex w-full items-start gap-4 text-left">
+    <button
+      onClick={onClick}
+      className="group relative z-0 flex w-full items-start gap-4 text-left"
+    >
+      <span
+        aria-hidden
+        className="pointer-events-none absolute -inset-x-5 -inset-y-2 -z-10 rounded-[12px] transition-colors duration-150 ease-out group-hover:bg-[rgba(145,204,255,0.15)]"
+      />
       <div
         className="shrink-0 rounded-[10px] flex items-center justify-center"
         style={{ width: 128, height: 128, backgroundColor: '#e8e8e8' }}
@@ -266,7 +306,11 @@ export default function DiaryListPage() {
       <div className="w-full flex flex-col overflow-hidden" style={{ backgroundColor: '#faf9f5', height: '100%' }}>
         {/* 상단 설정 아이콘 */}
         <div className="shrink-0 flex items-center px-[24px] pt-[20px] pb-1">
-          <button onClick={() => navigate('/profile')} aria-label="설정">
+          <button
+            className="rounded-full p-2 -m-2 transition-all duration-150 ease-out hover:bg-[rgba(145,204,255,0.15)]"
+            onClick={() => navigate('/profile')}
+            aria-label="설정"
+          >
             <img src="/images/icon-settings.svg" alt="" style={{ width: 32, height: 32 }} />
           </button>
         </div>
@@ -398,8 +442,8 @@ export default function DiaryListPage() {
           <FilterPill label={`${month}월`} onClick={() => setPickerOpen('month')} />
         </div>
 
-        {/* 일기 목록 */}
-        <div className="flex-1 overflow-y-auto px-[37px] mt-4 pb-8">
+        {/* 일기 목록 — pt-2 는 첫 row hover 배경이 위로 8px 뻗을 때 overflow에 잘리지 않게 하려는 여유 */}
+        <div className="flex-1 overflow-y-auto px-[37px] mt-4 pt-2 pb-8">
           {diaries.length === 0 ? (
             <p
               className="text-center pt-16 text-[#959595] text-[14px]"

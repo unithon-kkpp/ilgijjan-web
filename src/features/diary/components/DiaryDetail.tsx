@@ -360,8 +360,8 @@ function CustomMusicPlayer({ src }: { src: string }) {
 
       {/* 큰 재생/일시정지 버튼 */}
       <button
-        className="mt-10 transition-transform duration-150 ease-out active:scale-90"
-        style={{ width: 68, height: 68, WebkitTapHighlightColor: 'transparent' }}
+        className="mt-10"
+        style={{ width: 68, height: 68 }}
         onClick={toggle}
         aria-label={playing ? '일시정지' : '재생'}
       >
@@ -469,7 +469,7 @@ function DeleteConfirmModal({
         {/* 버튼 row — 예(회색)=삭제, 아니요(빨강)=취소 */}
         <div className="flex" style={{ marginTop: 24, gap: 32 }}>
           <button
-            className="transition-transform duration-150 ease-out active:scale-95 disabled:opacity-60 disabled:active:scale-100"
+            className="disabled:opacity-60"
             style={{
               width: 90,
               height: 54,
@@ -479,7 +479,6 @@ function DeleteConfirmModal({
               fontFamily: "'NanumSquareRound', sans-serif",
               fontWeight: 800,
               fontSize: 18,
-              WebkitTapHighlightColor: 'transparent',
             }}
             onClick={onConfirm}
             disabled={isLoading}
@@ -488,7 +487,7 @@ function DeleteConfirmModal({
             {isLoading ? '삭제중' : '예'}
           </button>
           <button
-            className="transition-transform duration-150 ease-out active:scale-95 disabled:opacity-60 disabled:active:scale-100"
+            className="disabled:opacity-60"
             style={{
               width: 90,
               height: 54,
@@ -498,7 +497,6 @@ function DeleteConfirmModal({
               fontFamily: "'NanumSquareRound', sans-serif",
               fontWeight: 800,
               fontSize: 18,
-              WebkitTapHighlightColor: 'transparent',
             }}
             onClick={onCancel}
             disabled={isLoading}
@@ -513,16 +511,43 @@ function DeleteConfirmModal({
 }
 
 function OriginalContentModal({ diary, onClose }: { diary: Diary; onClose: () => void }) {
+  // closing 동안 exit 애니메이션 → 끝나면 onAnimationEnd 로 부모에 unmount 요청(onClose)
+  const [closing, setClosing] = useState(false)
+
+  function requestClose() {
+    if (!closing) setClosing(true)
+  }
+
+  // panel 의 slide 애니메이션 완료 시점을 unmount 트리거로 사용
+  // 입장 애니메이션이 끝났을 때도 한 번 fire 되지만 closing=false 라 무시됨
+  function handlePanelAnimationEnd() {
+    if (closing) onClose()
+  }
+
+  // ESC = 닫기
+  useEffect(() => {
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        e.preventDefault()
+        requestClose()
+      }
+    }
+    window.addEventListener('keydown', onKeyDown)
+    return () => window.removeEventListener('keydown', onKeyDown)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
   return (
     <div
-      className="absolute inset-0 z-40 flex items-end justify-center"
+      className={`absolute inset-0 z-40 flex items-end justify-center ${closing ? 'animate-fade-out' : 'animate-fade-in'}`}
       style={{ backgroundColor: 'rgba(0,0,0,0.4)' }}
-      onClick={onClose}
+      onClick={requestClose}
     >
       <div
-        className="w-full bg-white rounded-t-[28px] overflow-hidden"
+        className={`w-full bg-white rounded-t-[28px] overflow-hidden ${closing ? 'animate-slide-down-modal' : 'animate-slide-up-modal'}`}
         style={{ height: '70%' }}
         onClick={(e) => e.stopPropagation()}
+        onAnimationEnd={handlePanelAnimationEnd}
       >
         <div className="flex flex-col items-center pt-8 px-6 h-full overflow-y-auto pb-10">
           <p
@@ -606,8 +631,7 @@ export default function DiaryDetail({ diary }: DiaryDetailProps) {
       {/* 헤더 — 뒤로가기 + 휴지통 */}
       <div className="shrink-0 flex items-center justify-between px-5 pt-5 pb-2">
         <button
-          className="transition-transform duration-150 ease-out active:scale-90"
-          style={{ WebkitTapHighlightColor: 'transparent' }}
+          className="rounded-full p-2 -m-2 transition-all duration-150 ease-out hover:bg-[rgba(145,204,255,0.15)]"
           onClick={() => navigate(-1)}
           aria-label="뒤로가기"
         >
@@ -615,8 +639,7 @@ export default function DiaryDetail({ diary }: DiaryDetailProps) {
         </button>
         {diary.isOwner ? (
           <button
-            className="transition-transform duration-150 ease-out active:scale-90"
-            style={{ WebkitTapHighlightColor: 'transparent' }}
+            className="rounded-full p-2 -m-2 transition-all duration-150 ease-out hover:bg-[rgba(145,204,255,0.15)]"
             onClick={() => setDeleteConfirmOpen(true)}
             aria-label="삭제"
           >
@@ -645,54 +668,84 @@ export default function DiaryDetail({ diary }: DiaryDetailProps) {
         </div>
       </div>
 
-      {/* 카드 영역 — z-10으로 잔디 위에 떠 있음 */}
+      {/* 카드 영역 — z-10으로 잔디 위에 떠 있음. 가사 ↔ 이미지 flip 애니메이션 */}
       <div className="relative shrink-0 px-5 z-10">
         <div
-          className="w-full rounded-[20px] relative overflow-hidden"
-          style={{ aspectRatio: '1 / 1' }}
+          className="w-full relative"
+          style={{ aspectRatio: '1 / 1', perspective: '1200px' }}
         >
-          {showLyrics ? (
+          {/* 회전 컨테이너 — showLyrics 에 따라 Y축 0deg ↔ 180deg */}
+          <div
+            className="absolute inset-0"
+            style={{
+              transformStyle: 'preserve-3d',
+              transition: 'transform 850ms cubic-bezier(0.4, 0, 0.2, 1)',
+              transform: showLyrics ? 'rotateY(180deg)' : 'rotateY(0deg)',
+            }}
+          >
+            {/* 앞면: 이미지 */}
             <div
-              className="w-full h-full overflow-y-auto"
-              style={{ backgroundColor: LYRICS_BLUE, padding: '32px 40px' }}
+              className="absolute inset-0 rounded-[20px] overflow-hidden"
+              style={{
+                backfaceVisibility: 'hidden',
+                WebkitBackfaceVisibility: 'hidden',
+              }}
             >
-              <p
-                className="text-center whitespace-pre-wrap break-keep"
-                style={{
-                  fontFamily: "'AndongKaturi', sans-serif",
-                  fontWeight: 400,
-                  fontSize: 22,
-                  lineHeight: 1.55,
-                  color: TEXT_BLACK,
-                }}
-              >
-                {diary.lyrics ?? '가사를 만들고 있어요...'}
-              </p>
+              {hasImage ? (
+                <img
+                  src={diary.imageUrl!}
+                  alt=""
+                  className="w-full h-full object-cover"
+                />
+              ) : (
+                <div
+                  className="w-full h-full flex items-center justify-center"
+                  style={{ backgroundColor: '#E8E8E8' }}
+                >
+                  <span
+                    className="text-[14px] text-[#7a7a7a]"
+                    style={{ fontFamily: "'NanumSquareRound', sans-serif", fontWeight: 700 }}
+                  >
+                    그림을 만들고 있어요...
+                  </span>
+                </div>
+              )}
             </div>
-          ) : hasImage ? (
-            <img
-              src={diary.imageUrl!}
-              alt=""
-              className="w-full h-full object-cover"
-            />
-          ) : (
+            {/* 뒷면: 가사 — rotateY(180) 으로 미리 뒤집어둠 */}
             <div
-              className="w-full h-full flex items-center justify-center"
-              style={{ backgroundColor: '#E8E8E8' }}
+              className="absolute inset-0 rounded-[20px] overflow-hidden"
+              style={{
+                backfaceVisibility: 'hidden',
+                WebkitBackfaceVisibility: 'hidden',
+                transform: 'rotateY(180deg)',
+                backgroundColor: LYRICS_BLUE,
+              }}
             >
-              <span
-                className="text-[14px] text-[#7a7a7a]"
-                style={{ fontFamily: "'NanumSquareRound', sans-serif", fontWeight: 700 }}
+              <div
+                className="w-full h-full overflow-y-auto"
+                style={{ padding: '32px 40px' }}
               >
-                그림을 만들고 있어요...
-              </span>
+                <p
+                  className="text-center whitespace-pre-wrap break-keep"
+                  style={{
+                    fontFamily: "'AndongKaturi', sans-serif",
+                    fontWeight: 400,
+                    fontSize: 22,
+                    lineHeight: 1.55,
+                    color: TEXT_BLACK,
+                  }}
+                >
+                  {diary.lyrics ?? '가사를 만들고 있어요...'}
+                </p>
+              </div>
             </div>
-          )}
+          </div>
 
+          {/* 토글 버튼 — flip 컨테이너 밖이라 회전 영향 안 받음 */}
           {canToggleCard && (
             <button
-              className="absolute flex items-center justify-center rounded-full transition-all duration-150 ease-out hover:bg-white/60 active:bg-white/80 active:scale-90"
-              style={{ left: 10, bottom: 8, width: 38, height: 34, WebkitTapHighlightColor: 'transparent' }}
+              className="absolute z-10 flex items-center justify-center rounded-full transition-all duration-150 ease-out hover:bg-white/60 active:bg-white/80"
+              style={{ left: 10, bottom: 8, width: 38, height: 34 }}
               onClick={() => setShowLyrics(!showLyrics)}
               aria-label={showLyrics ? '그림 보기' : '가사 보기'}
             >
@@ -723,8 +776,7 @@ export default function DiaryDetail({ diary }: DiaryDetailProps) {
         {/* 좋아요 + 책 아이콘 */}
         <div className="flex items-center justify-between">
           <button
-            className="flex items-center gap-2 transition-transform duration-150 ease-out active:scale-90 disabled:active:scale-100"
-            style={{ WebkitTapHighlightColor: 'transparent' }}
+            className="flex items-center gap-2"
             disabled={!likeEnabled || likeMutation.isPending}
             onClick={() => likeMutation.mutate({ wasLiked: diary.isLiked })}
             aria-label="좋아요"
@@ -744,8 +796,6 @@ export default function DiaryDetail({ diary }: DiaryDetailProps) {
           </button>
           {hasOriginal && (
             <button
-              className="transition-transform duration-150 ease-out active:scale-90"
-              style={{ WebkitTapHighlightColor: 'transparent' }}
               onClick={() => setOriginalOpen(true)}
               aria-label="원본 보기"
             >
@@ -806,8 +856,6 @@ export default function DiaryDetail({ diary }: DiaryDetailProps) {
               </p>
             </div>
             <button
-              className="transition-transform duration-150 ease-out active:scale-90 disabled:active:scale-100"
-              style={{ WebkitTapHighlightColor: 'transparent' }}
               disabled={publishMutation.isPending}
               onClick={() => publishMutation.mutate({ wasPublic: diary.isPublic })}
               aria-label="공개 토글"

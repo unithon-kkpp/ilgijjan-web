@@ -30,4 +30,8 @@ export const diaryApi = {
 
   unpublish: (diaryId: number) =>
     httpClient.patch(`/diaries/${diaryId}/unpublish`).then((res) => res.data),
+
+  // DELETE /api/diaries/{diaryId} — 일기 삭제 (본인 일기만)
+  remove: (diaryId: number) =>
+    httpClient.delete(`/diaries/${diaryId}`).then((res) => res.data),
 }

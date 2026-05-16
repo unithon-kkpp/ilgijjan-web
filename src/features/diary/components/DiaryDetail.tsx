@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import type { Diary } from '../types/diary.types'
 import { useTogglePublish } from '../hooks/useTogglePublish'
+import { useDeleteDiary } from '../hooks/useDeleteDiary'
 import { useLike } from '@/features/like/hooks/useLike'
 import WeatherIcon from './WeatherIcon'
 import MoodIcon from './MoodIcon'
@@ -370,6 +371,147 @@ function CustomMusicPlayer({ src }: { src: string }) {
   )
 }
 
+// Figma picon:on (881:3473) — 사이렌/경광등 아이콘. fill 색은 caller가 결정
+function SirenIcon({ size = 35, color = '#FF7474' }: { size?: number; color?: string }) {
+  return (
+    <svg
+      width={size}
+      height={size * (23.625 / 22.75)}
+      viewBox="0 0 22.75 23.625"
+      fill="none"
+    >
+      <path
+        d="M10.5 1.75V0.875C10.5 0.642936 10.5922 0.420376 10.7563 0.256282C10.9204 0.0921873 11.1429 0 11.375 0C11.6071 0 11.8296 0.0921873 11.9937 0.256282C12.1578 0.420376 12.25 0.642936 12.25 0.875V1.75C12.25 1.98206 12.1578 2.20462 11.9937 2.36872C11.8296 2.53281 11.6071 2.625 11.375 2.625C11.1429 2.625 10.9204 2.53281 10.7563 2.36872C10.5922 2.20462 10.5 1.98206 10.5 1.75ZM19.25 5.25C19.3649 5.25009 19.4788 5.22753 19.585 5.18362C19.6912 5.1397 19.7877 5.07529 19.8691 4.99406L20.7441 4.11906C20.9082 3.95488 21.0005 3.73219 21.0005 3.5C21.0005 3.26781 20.9082 3.04512 20.7441 2.88094C20.5799 2.71675 20.3572 2.62451 20.125 2.62451C19.8928 2.62451 19.6701 2.71675 19.5059 2.88094L18.6309 3.75594C18.5084 3.87831 18.425 4.03428 18.3912 4.20411C18.3573 4.37393 18.3747 4.54997 18.441 4.70994C18.5072 4.86991 18.6195 5.00662 18.7635 5.10276C18.9075 5.19889 19.0768 5.25014 19.25 5.25ZM2.88094 4.99406C3.04512 5.15825 3.26781 5.25049 3.5 5.25049C3.73219 5.25049 3.95488 5.15825 4.11906 4.99406C4.28325 4.82988 4.37549 4.60719 4.37549 4.375C4.37549 4.14281 4.28325 3.92012 4.11906 3.75594L3.24406 2.88094C3.07988 2.71675 2.85719 2.62451 2.625 2.62451C2.39281 2.62451 2.17012 2.71675 2.00594 2.88094C1.84175 3.04512 1.74951 3.26781 1.74951 3.5C1.74951 3.73219 1.84175 3.95488 2.00594 4.11906L2.88094 4.99406ZM22.75 19.25V21.875C22.75 22.3391 22.5656 22.7842 22.2374 23.1124C21.9092 23.4406 21.4641 23.625 21 23.625H1.75C1.28587 23.625 0.840752 23.4406 0.512563 23.1124C0.184374 22.7842 0 22.3391 0 21.875V19.25C0 18.7859 0.184374 18.3408 0.512563 18.0126C0.840752 17.6844 1.28587 17.5 1.75 17.5V14C1.74996 12.7298 2.00133 11.4722 2.48961 10.2997C2.97788 9.12711 3.69342 8.06279 4.59496 7.16806C5.4965 6.27333 6.56621 5.56589 7.74245 5.08652C8.91868 4.60715 10.1782 4.36533 11.4483 4.375C16.7147 4.41438 21 8.78172 21 14.1094V17.5C21.4641 17.5 21.9092 17.6844 22.2374 18.0126C22.5656 18.3408 22.75 18.7859 22.75 19.25ZM12.1056 9.61297C14.1827 9.96187 15.75 11.8475 15.75 14C15.75 14.2321 15.8422 14.4546 16.0063 14.6187C16.1704 14.7828 16.3929 14.875 16.625 14.875C16.8571 14.875 17.0796 14.7828 17.2437 14.6187C17.4078 14.4546 17.5 14.2321 17.5 14C17.5 11.0031 15.3048 8.37484 12.3944 7.88703C12.2806 7.8669 12.1639 7.86952 12.0511 7.89475C11.9383 7.91997 11.8316 7.96729 11.7372 8.03398C11.6428 8.10067 11.5625 8.18541 11.501 8.28329C11.4395 8.38118 11.3981 8.49028 11.379 8.60428C11.3599 8.71829 11.3636 8.83494 11.3899 8.9475C11.4162 9.06007 11.4645 9.16631 11.532 9.2601C11.5996 9.35389 11.6851 9.43336 11.7835 9.49393C11.882 9.55449 11.9914 9.59495 12.1056 9.61297ZM21 21.875V19.25H1.75V21.875H21Z"
+        fill={color}
+      />
+    </svg>
+  )
+}
+
+// Figma 디자인 색
+const SIREN_RED = '#FF7474'
+const BUTTON_GRAY = '#D9D9D9'
+
+function DeleteConfirmModal({
+  onConfirm,
+  onCancel,
+  isLoading,
+  isError,
+}: {
+  onConfirm: () => void
+  onCancel: () => void
+  isLoading: boolean
+  isError: boolean
+}) {
+  // ESC = "아니요"(취소). 진행 중일 땐 무시 (이미 호출된 DELETE는 못 되돌리니까)
+  useEffect(() => {
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && !isLoading) {
+        e.preventDefault()
+        onCancel()
+      }
+    }
+    window.addEventListener('keydown', onKeyDown)
+    return () => window.removeEventListener('keydown', onKeyDown)
+  }, [isLoading, onCancel])
+
+  return (
+    <div
+      className="absolute inset-0 z-50 flex items-center justify-center"
+      style={{ backgroundColor: 'rgba(0,0,0,0.45)' }}
+      onClick={isLoading ? undefined : onCancel}
+    >
+      <div
+        className="flex flex-col items-center bg-white"
+        style={{
+          width: 326,
+          borderRadius: 20,
+          paddingTop: 26,
+          paddingBottom: 32,
+        }}
+        onClick={(e) => e.stopPropagation()}
+      >
+        {/* 사이렌 아이콘 */}
+        <SirenIcon size={35} color={SIREN_RED} />
+
+        {/* 본문 — 2줄 */}
+        <p
+          className="text-center"
+          style={{
+            marginTop: 16,
+            fontFamily: "'NanumSquareRound', sans-serif",
+            fontWeight: 700,
+            fontSize: 16.5,
+            lineHeight: '23px',
+            color: TEXT_BLACK,
+          }}
+        >
+          삭제된 일기와 노래는 복구가 불가능합니다.
+          <br />
+          일기와 노래를 삭제하시겠습니까?
+        </p>
+
+        {isError && (
+          <p
+            className="text-center"
+            style={{
+              marginTop: 8,
+              fontFamily: "'NanumSquareRound', sans-serif",
+              fontWeight: 700,
+              fontSize: 12,
+              color: SIREN_RED,
+            }}
+          >
+            삭제에 실패했어요. 다시 시도해주세요.
+          </p>
+        )}
+
+        {/* 버튼 row — 예(회색)=삭제, 아니요(빨강)=취소 */}
+        <div className="flex" style={{ marginTop: 24, gap: 32 }}>
+          <button
+            className="transition-transform duration-150 ease-out active:scale-95 disabled:opacity-60 disabled:active:scale-100"
+            style={{
+              width: 90,
+              height: 54,
+              borderRadius: 20,
+              backgroundColor: BUTTON_GRAY,
+              color: TEXT_BLACK,
+              fontFamily: "'NanumSquareRound', sans-serif",
+              fontWeight: 800,
+              fontSize: 18,
+              WebkitTapHighlightColor: 'transparent',
+            }}
+            onClick={onConfirm}
+            disabled={isLoading}
+            aria-label="삭제"
+          >
+            {isLoading ? '삭제중' : '예'}
+          </button>
+          <button
+            className="transition-transform duration-150 ease-out active:scale-95 disabled:opacity-60 disabled:active:scale-100"
+            style={{
+              width: 90,
+              height: 54,
+              borderRadius: 20,
+              backgroundColor: SIREN_RED,
+              color: TEXT_BLACK,
+              fontFamily: "'NanumSquareRound', sans-serif",
+              fontWeight: 800,
+              fontSize: 18,
+              WebkitTapHighlightColor: 'transparent',
+            }}
+            onClick={onCancel}
+            disabled={isLoading}
+            aria-label="취소"
+          >
+            아니요
+          </button>
+        </div>
+      </div>
+    </div>
+  )
+}
+
 function OriginalContentModal({ diary, onClose }: { diary: Diary; onClose: () => void }) {
   return (
     <div
@@ -429,9 +571,20 @@ export default function DiaryDetail({ diary }: DiaryDetailProps) {
   // 기본: 그림(AI 생성 이미지) 모드. 그림이 없을 때만 가사 모드로 시작.
   const [showLyrics, setShowLyrics] = useState<boolean>(!hasImage)
   const [originalOpen, setOriginalOpen] = useState(false)
+  const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false)
 
   const likeMutation = useLike(diary.diaryId)
   const publishMutation = useTogglePublish(diary.diaryId)
+  const deleteMutation = useDeleteDiary(diary.diaryId)
+
+  function handleConfirmDelete() {
+    deleteMutation.mutate(undefined, {
+      onSuccess: () => {
+        // 삭제 후 일기 목록으로 — replace 로 두면 뒤로가기로 다시 못 들어옴
+        navigate('/', { replace: true })
+      },
+    })
+  }
 
   const canToggleCard = hasLyrics && hasImage
   const hasOriginal = diary.isOwner && (diary.text || diary.photoUrl)
@@ -464,6 +617,7 @@ export default function DiaryDetail({ diary }: DiaryDetailProps) {
           <button
             className="transition-transform duration-150 ease-out active:scale-90"
             style={{ WebkitTapHighlightColor: 'transparent' }}
+            onClick={() => setDeleteConfirmOpen(true)}
             aria-label="삭제"
           >
             <TrashIcon size={26} />
@@ -474,7 +628,7 @@ export default function DiaryDetail({ diary }: DiaryDetailProps) {
       </div>
 
       {/* 날짜 + 날씨 + 무드 */}
-      <div className="shrink-0 flex items-center justify-between px-8 pt-3 pb-4">
+      <div className="shrink-0 flex items-center justify-between px-8 pt-5 pb-4">
         <p
           style={{
             fontFamily: "'NanumSquareRound', sans-serif",
@@ -667,6 +821,18 @@ export default function DiaryDetail({ diary }: DiaryDetailProps) {
 
       {originalOpen && (
         <OriginalContentModal diary={diary} onClose={() => setOriginalOpen(false)} />
+      )}
+
+      {deleteConfirmOpen && (
+        <DeleteConfirmModal
+          onCancel={() => {
+            setDeleteConfirmOpen(false)
+            deleteMutation.reset()
+          }}
+          onConfirm={handleConfirmDelete}
+          isLoading={deleteMutation.isPending}
+          isError={deleteMutation.isError}
+        />
       )}
     </div>
   )

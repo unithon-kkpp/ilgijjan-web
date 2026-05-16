@@ -3,7 +3,12 @@ import { useNavigate } from 'react-router-dom'
 import { authApi } from '@/features/auth/api/authApi'
 import { tokenStorage } from '@/shared/lib/tokenStorage'
 
-async function exchangeCodeForToken(code: string): Promise<string> {
+interface KakaoTokens {
+  accessToken: string
+  refreshToken: string
+}
+
+async function exchangeCodeForToken(code: string): Promise<KakaoTokens> {
   const res = await fetch('https://kauth.kakao.com/oauth/token', {
     method: 'POST',
     headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8' },
@@ -16,7 +21,7 @@ async function exchangeCodeForToken(code: string): Promise<string> {
   })
   const data = await res.json()
   if (!data.access_token) throw new Error(data.error_description ?? '토큰 교환 실패')
-  return data.access_token
+  return { accessToken: data.access_token, refreshToken: data.refresh_token }
 }
 
 export default function KakaoCallbackPage() {
@@ -30,9 +35,11 @@ export default function KakaoCallbackPage() {
     }
 
     exchangeCodeForToken(code)
-      .then((kakaoAccessToken) => {
-        tokenStorage.setKakao(kakaoAccessToken)
-        return authApi.login({ provider: 'KAKAO', accessToken: kakaoAccessToken })
+      .then(({ accessToken, refreshToken }) => {
+        tokenStorage.setKakao(accessToken)
+        // 카카오 refresh token 저장 — 이후 로그아웃/탈퇴 시 access token 만료되면 이걸로 재발급
+        if (refreshToken) tokenStorage.setKakaoRefresh(refreshToken)
+        return authApi.login({ provider: 'KAKAO', accessToken })
       })
       .then((res) => {
         tokenStorage.set(res.accessToken)

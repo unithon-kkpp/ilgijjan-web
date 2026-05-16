@@ -1,7 +1,7 @@
 export type Weather = 'SUNNY' | 'CLOUDY' | 'RAINY' | 'SNOWY'
 export type Mood = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9
 export type DiaryType = 'TEXT' | 'PHOTO'
-export type DiaryStatus = 'PENDING' | 'COMPLETED'
+export type DiaryStatus = 'PENDING' | 'COMPLETED' | 'FAILED' | 'DELETED'
 
 export interface Diary {
   diaryId: number

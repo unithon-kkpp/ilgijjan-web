@@ -158,7 +158,7 @@ function DiaryRow({ item, onClick }: { item: DiaryListItem; onClick: () => void 
         >
           {formatDate(item.date)}
         </p>
-        <div className="flex items-center gap-1">
+        <div className="flex items-center gap-3">
           <WeatherIcon weather={item.weather} size={32} />
           <p
             className="text-[14px] text-[#424242]"
@@ -168,7 +168,7 @@ function DiaryRow({ item, onClick }: { item: DiaryListItem; onClick: () => void 
           </p>
         </div>
         {item.introLines && (
-          <div className="flex items-center gap-1">
+          <div className="flex items-center gap-3">
             <MoodIcon mood={item.mood} size={32} />
             <p
               className="text-[14px] text-[#424242]"
@@ -178,6 +178,39 @@ function DiaryRow({ item, onClick }: { item: DiaryListItem; onClick: () => void 
             </p>
           </div>
         )}
+      </div>
+    </button>
+  )
+}
+
+// PENDING(생성 중) 일기는 썸네일 없이 '생성중' 표시. 클릭하면 폴링 화면으로 이동
+function PendingDiaryRow({ item, onClick }: { item: DiaryListItem; onClick: () => void }) {
+  return (
+    <button onClick={onClick} className="flex w-full items-start gap-4 text-left">
+      <div
+        className="shrink-0 rounded-[10px] flex items-center justify-center"
+        style={{ width: 128, height: 128, backgroundColor: '#e8e8e8' }}
+      >
+        <span
+          className="text-[13px] text-[#7a7a7a]"
+          style={{ fontFamily: "'NanumSquareRound', sans-serif", fontWeight: 700 }}
+        >
+          생성중...
+        </span>
+      </div>
+      <div className="flex flex-col pt-3 gap-[10px]">
+        <p
+          className="text-[18px] text-[#424242]"
+          style={{ fontFamily: "'NanumSquareRound', sans-serif", fontWeight: 700 }}
+        >
+          {formatDate(item.date)}
+        </p>
+        <p
+          className="text-[14px] text-[#959595]"
+          style={{ fontFamily: "'NanumSquareRound', sans-serif", fontWeight: 700 }}
+        >
+          노래를 만들고 있어요...
+        </p>
       </div>
     </button>
   )
@@ -201,7 +234,10 @@ export default function DiaryListPage() {
     return null
   }
 
-  const diaries: DiaryListItem[] = diaryData?.diaryList ?? []
+  // FAILED / DELETED 는 목록에서 숨김. COMPLETED는 정상 표시, PENDING은 '생성중' 카드로 표시
+  const diaries: DiaryListItem[] = (diaryData?.diaryList ?? []).filter(
+    (d) => d.status === 'COMPLETED' || d.status === 'PENDING',
+  )
   const canCreateSong = (user?.noteCount ?? 0) > 0
   const hero = user?.character
     ? CHARACTER_HERO[user.character]
@@ -229,9 +265,9 @@ export default function DiaryListPage() {
     <>
       <div className="w-full flex flex-col overflow-hidden" style={{ backgroundColor: '#faf9f5', height: '100%' }}>
         {/* 상단 설정 아이콘 */}
-        <div className="shrink-0 flex items-center px-[18px] pt-[14px] pb-1">
+        <div className="shrink-0 flex items-center px-[24px] pt-[20px] pb-1">
           <button onClick={() => navigate('/profile')} aria-label="설정">
-            <img src="/images/icon-settings.svg" alt="" style={{ width: 22, height: 22 }} />
+            <img src="/images/icon-settings.svg" alt="" style={{ width: 32, height: 32 }} />
           </button>
         </div>
 
@@ -316,7 +352,7 @@ export default function DiaryListPage() {
             disabled={!canCreateSong}
             className="w-full rounded-[10px] flex items-center justify-center gap-2 mt-2"
             style={{
-              height: 42,
+              height: 50,
               background: canCreateSong
                 ? 'linear-gradient(95.6deg, #9cd1ff 24.3%, #d1eaff 51.2%, #7ec3ff 84.5%)'
                 : '#d3d3d3',
@@ -373,13 +409,21 @@ export default function DiaryListPage() {
             </p>
           ) : (
             <div className="flex flex-col gap-8">
-              {diaries.map((item) => (
-                <DiaryRow
-                  key={item.id}
-                  item={item}
-                  onClick={() => navigate(`/diary/${item.id}`)}
-                />
-              ))}
+              {diaries.map((item) =>
+                item.status === 'PENDING' ? (
+                  <PendingDiaryRow
+                    key={item.id}
+                    item={item}
+                    onClick={() => navigate(`/diary/new/loading/${item.id}`)}
+                  />
+                ) : (
+                  <DiaryRow
+                    key={item.id}
+                    item={item}
+                    onClick={() => navigate(`/diary/${item.id}`)}
+                  />
+                ),
+              )}
             </div>
           )}
         </div>

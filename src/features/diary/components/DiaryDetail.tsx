@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import type { Diary } from '../types/diary.types'
+import { useTogglePublish } from '../hooks/useTogglePublish'
+import { useLike } from '@/features/like/hooks/useLike'
 import WeatherIcon from './WeatherIcon'
 import MoodIcon from './MoodIcon'
 
@@ -14,6 +16,8 @@ const SHARE_CARD_GREEN = '#B5D984'
 const LYRICS_BLUE = '#DBEBFB'
 const TEXT_BLACK = '#424242'
 const HEART_RED = '#FF6969'
+// 비공개 상태일 때 하트/카운트 색 — 잔디 배경 위에서 자연스럽게 죽도록 살짝 올리브 톤
+const HEART_GRAY = '#9DA890'
 
 function parseDate(dateStr: string) {
   const [y, m, d] = dateStr.split(/[-.]/).map(Number)
@@ -48,17 +52,25 @@ function TrashIcon({ size = 26 }: { size?: number }) {
   )
 }
 
-function HeartIcon({ size = 37, filled }: { size?: number; filled: boolean }) {
+function HeartIcon({
+  size = 37,
+  color,
+  filled,
+}: {
+  size?: number
+  color: string
+  filled: boolean
+}) {
   return (
     <svg
       width={size}
       height={size * (32 / 37)}
       viewBox="-2 -2 41 36"
-      fill={filled ? HEART_RED : 'none'}
+      fill={filled ? color : 'none'}
     >
       <path
         d="M0 10.8782C0 19.9177 7.437 24.7339 12.8797 29.0463C14.8 30.5668 16.65 32 18.5 32C20.35 32 22.2 30.5687 24.1203 29.0445C29.5649 24.7357 37 19.9177 37 10.8801C37 1.84251 26.825 -4.57228 18.5 4.11956C10.175 -4.57228 0 1.83879 0 10.8782Z"
-        stroke={HEART_RED}
+        stroke={color}
         strokeWidth="3"
         strokeLinejoin="round"
       />
@@ -347,12 +359,12 @@ function CustomMusicPlayer({ src }: { src: string }) {
 
       {/* 큰 재생/일시정지 버튼 */}
       <button
-        className="mt-6 transition-transform duration-150 ease-out active:scale-90"
-        style={{ width: 80, height: 80, WebkitTapHighlightColor: 'transparent' }}
+        className="mt-10 transition-transform duration-150 ease-out active:scale-90"
+        style={{ width: 68, height: 68, WebkitTapHighlightColor: 'transparent' }}
         onClick={toggle}
         aria-label={playing ? '일시정지' : '재생'}
       >
-        {playing ? <PauseIcon size={80} /> : <PlayTriangle size={80} />}
+        {playing ? <PauseIcon size={68} /> : <PlayTriangle size={68} />}
       </button>
     </div>
   )
@@ -417,10 +429,21 @@ export default function DiaryDetail({ diary }: DiaryDetailProps) {
   // 기본: 그림(AI 생성 이미지) 모드. 그림이 없을 때만 가사 모드로 시작.
   const [showLyrics, setShowLyrics] = useState<boolean>(!hasImage)
   const [originalOpen, setOriginalOpen] = useState(false)
-  const [publicVisible, setPublicVisible] = useState(diary.isPublic)
+
+  const likeMutation = useLike(diary.diaryId)
+  const publishMutation = useTogglePublish(diary.diaryId)
 
   const canToggleCard = hasLyrics && hasImage
   const hasOriginal = diary.isOwner && (diary.text || diary.photoUrl)
+
+  // 좋아요 색/상태
+  //  - 비공개: 회색 완전 채움 (비활성)
+  //  - 공개+안누름: 빨간 테두리만
+  //  - 공개+눌렀음: 빨강 완전 채움
+  const likeEnabled = diary.isPublic
+  const heartColor = likeEnabled ? HEART_RED : HEART_GRAY
+  const heartFilled = !likeEnabled || diary.isLiked
+  const likeTextColor = likeEnabled ? TEXT_BLACK : HEART_GRAY
 
   return (
     <div
@@ -546,17 +569,20 @@ export default function DiaryDetail({ diary }: DiaryDetailProps) {
         {/* 좋아요 + 책 아이콘 */}
         <div className="flex items-center justify-between">
           <button
-            className="flex items-center gap-2 transition-transform duration-150 ease-out active:scale-90"
+            className="flex items-center gap-2 transition-transform duration-150 ease-out active:scale-90 disabled:active:scale-100"
             style={{ WebkitTapHighlightColor: 'transparent' }}
+            disabled={!likeEnabled || likeMutation.isPending}
+            onClick={() => likeMutation.mutate({ wasLiked: diary.isLiked })}
             aria-label="좋아요"
+            aria-pressed={diary.isLiked}
           >
-            <HeartIcon size={36} filled={diary.isLiked} />
+            <HeartIcon size={36} color={heartColor} filled={heartFilled} />
             <span
               className="text-[18px]"
               style={{
                 fontFamily: "'NanumSquareRound', sans-serif",
                 fontWeight: 800,
-                color: TEXT_BLACK,
+                color: likeTextColor,
               }}
             >
               {diary.likeCount}
@@ -626,12 +652,14 @@ export default function DiaryDetail({ diary }: DiaryDetailProps) {
               </p>
             </div>
             <button
-              className="transition-transform duration-150 ease-out active:scale-90"
+              className="transition-transform duration-150 ease-out active:scale-90 disabled:active:scale-100"
               style={{ WebkitTapHighlightColor: 'transparent' }}
-              onClick={() => setPublicVisible((v) => !v)}
+              disabled={publishMutation.isPending}
+              onClick={() => publishMutation.mutate({ wasPublic: diary.isPublic })}
               aria-label="공개 토글"
+              aria-pressed={diary.isPublic}
             >
-              <ToggleSwitch on={publicVisible} />
+              <ToggleSwitch on={diary.isPublic} />
             </button>
           </div>
         )}

@@ -26,8 +26,8 @@ export const diaryApi = {
     httpClient.post<CreateDiaryResponse>('/diaries', body).then((res) => res.data),
 
   publish: (diaryId: number) =>
-    httpClient.post(`/diaries/${diaryId}/publish`).then((res) => res.data),
+    httpClient.patch(`/diaries/${diaryId}/publish`).then((res) => res.data),
 
   unpublish: (diaryId: number) =>
-    httpClient.post(`/diaries/${diaryId}/unpublish`).then((res) => res.data),
+    httpClient.patch(`/diaries/${diaryId}/unpublish`).then((res) => res.data),
 }

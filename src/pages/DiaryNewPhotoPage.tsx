@@ -41,7 +41,7 @@ export default function DiaryNewPhotoPage() {
       setDraft((d) => ({ ...d, photoUrl: url }))
     } catch (e) {
       console.error('이미지 업로드 실패:', e)
-      setError('이미지 업로드에 실패했어. 다시 시도해줘!')
+      setError('이미지 업로드에 실패했어요. 다시 시도해주세요!')
       setPreviewUrl(null)
     }
   }

@@ -46,3 +46,11 @@ export type CreateDiaryRequest =
 export interface CreateDiaryResponse {
   diaryId: number
 }
+
+// 일기 생성 비동기 진행 상태 (폴링 응답)
+export type DiaryGenerationStatus = 'PENDING' | 'COMPLETED' | 'FAILED' | 'DELETED'
+
+export interface DiaryStatusResponse {
+  diaryId: number
+  status: DiaryGenerationStatus
+}

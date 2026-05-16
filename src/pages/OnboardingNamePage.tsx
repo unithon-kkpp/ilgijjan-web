@@ -23,9 +23,9 @@ export default function OnboardingNamePage() {
     } catch (e: any) {
       const status = e?.response?.status
       if (status === 409) {
-        setError('이 이름은 이미 사용중이야.\n다른 이름으로 해볼까?')
+        setError('이 이름은 이미 사용 중이에요.\n다른 이름으로 해볼까요?')
       } else {
-        setError('오류가 발생했어. 다시 시도해줘!')
+        setError('오류가 발생했어요. 다시 시도해주세요!')
       }
     } finally {
       setLoading(false)

@@ -14,6 +14,7 @@ import DiaryNewPhotoPage from '@/pages/DiaryNewPhotoPage'
 import DiaryNewWeatherPage from '@/pages/DiaryNewWeatherPage'
 import DiaryNewMoodPage from '@/pages/DiaryNewMoodPage'
 import DiaryNewWritePage from '@/pages/DiaryNewWritePage'
+import DiaryNewLoadingPage from '@/pages/DiaryNewLoadingPage'
 import ProfilePage from '@/pages/ProfilePage'
 
 function PrivateRoute() {
@@ -43,6 +44,7 @@ export const router = createBrowserRouter([
           { path: '/diary/new/weather', element: <DiaryNewWeatherPage /> },
           { path: '/diary/new/mood', element: <DiaryNewMoodPage /> },
           { path: '/diary/new/write', element: <DiaryNewWritePage /> },
+          { path: '/diary/new/loading/:id', element: <DiaryNewLoadingPage /> },
           { path: '/profile', element: <ProfilePage /> },
         ],
       },

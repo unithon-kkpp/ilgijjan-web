@@ -4,6 +4,7 @@ import type {
   CreateDiaryRequest,
   CreateDiaryResponse,
   DiaryListItem,
+  DiaryStatusResponse,
 } from '../types/diary.types'
 
 export const diaryApi = {
@@ -14,6 +15,12 @@ export const diaryApi = {
 
   getOne: (diaryId: number) =>
     httpClient.get<Diary>(`/diaries/${diaryId}`).then((res) => res.data),
+
+  // 일기 생성 진행 상태 폴링 조회 (PENDING / COMPLETED / FAILED / DELETED)
+  getStatus: (diaryId: number) =>
+    httpClient
+      .get<DiaryStatusResponse>(`/diaries/${diaryId}/status`)
+      .then((res) => res.data),
 
   create: (body: CreateDiaryRequest) =>
     httpClient.post<CreateDiaryResponse>('/diaries', body).then((res) => res.data),

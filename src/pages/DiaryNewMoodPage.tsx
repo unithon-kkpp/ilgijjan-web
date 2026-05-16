@@ -1,9 +1,12 @@
+import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAtom } from 'jotai'
+import axios from 'axios'
 import { diaryDraftAtom } from '@/app/store'
 import StepProgress from '@/features/diary/components/StepProgress'
 import MoodIcon from '@/features/diary/components/MoodIcon'
-import type { Mood } from '@/features/diary/types/diary.types'
+import { useCreateDiary } from '@/features/diary/hooks/useCreateDiary'
+import type { CreateDiaryRequest, Mood } from '@/features/diary/types/diary.types'
 
 // 9개의 기분 (값 1~9). Figma 디자인의 3x3 그리드 순서대로 매핑.
 const MOODS: { value: Mood; label: string }[] = [
@@ -21,24 +24,86 @@ const MOODS: { value: Mood; label: string }[] = [
 export default function DiaryNewMoodPage() {
   const navigate = useNavigate()
   const [draft, setDraft] = useAtom(diaryDraftAtom)
+  const createDiary = useCreateDiary()
+  const [toastMessage, setToastMessage] = useState<string | null>(null)
 
-  const canProceed = draft.mood !== null
+  // 토스트 자동 dismiss (3초)
+  useEffect(() => {
+    if (!toastMessage) return
+    const timer = setTimeout(() => setToastMessage(null), 3000)
+    return () => clearTimeout(timer)
+  }, [toastMessage])
 
-  const handleNext = () => {
+  const canProceed =
+    draft.mood !== null &&
+    draft.weather !== null &&
+    draft.type !== null &&
+    (draft.type === 'PHOTO' ? !!draft.photoUrl : draft.text.trim().length > 0) &&
+    !createDiary.isPending
+
+  const handleNext = async () => {
     if (!canProceed) return
-    // TODO: 폴링 API 나오면 여기서 diaryApi.create() 호출 후 로딩 화면으로 이동
-    // 현재는 draft만 보관하고 홈으로 이동
-    console.log('[일기 생성 draft]', draft)
-    alert(
-      `일기 생성 준비 완료!\n\ntype: ${draft.type}\n${
-        draft.type === 'PHOTO' ? `photoUrl: ${draft.photoUrl}` : `text: ${draft.text.slice(0, 30)}...`
-      }\nweather: ${draft.weather}\nmood: ${draft.mood}\n\n(API 호출은 폴링 API 나오면 연결 예정)`
-    )
-    navigate('/', { replace: true })
+
+    // draft를 API 요청 형식으로 매핑 (CreateDiaryRequest는 type별 discriminated union)
+    const body: CreateDiaryRequest =
+      draft.type === 'PHOTO'
+        ? {
+            type: 'PHOTO',
+            photoUrl: draft.photoUrl as string,
+            weather: draft.weather!,
+            mood: draft.mood!,
+          }
+        : {
+            type: 'TEXT',
+            text: draft.text,
+            weather: draft.weather!,
+            mood: draft.mood!,
+          }
+
+    try {
+      const { diaryId } = await createDiary.mutateAsync(body)
+      // 생성 요청 성공 → 폴링 로딩 화면으로 이동 (replace로 뒤로가기 방지)
+      navigate(`/diary/new/loading/${diaryId}`, { replace: true })
+    } catch (e) {
+      // 음표 부족(이미 오늘 일기 생성함) 케이스만 별도 안내, 나머지는 일반 에러
+      const errorCode =
+        axios.isAxiosError(e) ? (e.response?.data as { code?: string } | undefined)?.code : undefined
+      if (errorCode === 'INSUFFICIENT_NOTES') {
+        setToastMessage('오늘은 이미 일기를 만들었어요.\n내일 다시 와주세요!')
+      } else {
+        console.error('일기 생성 요청 실패:', e)
+        setToastMessage('일기 생성에 실패했어요.\n다시 시도해주세요!')
+      }
+    }
   }
 
   return (
     <div className="relative w-full h-full" style={{ backgroundColor: '#faf9f5' }}>
+      {/* 토스트 (INSUFFICIENT_NOTES 등 에러 안내) */}
+      {toastMessage && (
+        <div
+          role="alert"
+          className="absolute left-4 right-4 z-30 rounded-[10px] px-4 py-3 text-center text-white text-[14px]"
+          style={{
+            top: 16,
+            backgroundColor: 'rgba(66,66,66,0.92)',
+            fontFamily: "'NanumSquareRound', sans-serif",
+            fontWeight: 700,
+            whiteSpace: 'pre-line',
+            boxShadow: '0px 4px 12px rgba(0,0,0,0.15)',
+            animation: 'jjan-toast-in 0.25s ease-out both',
+          }}
+        >
+          {toastMessage}
+        </div>
+      )}
+      <style>{`
+        @keyframes jjan-toast-in {
+          from { opacity: 0; transform: translateY(-12px); }
+          to   { opacity: 1; transform: translateY(0); }
+        }
+      `}</style>
+
       <StepProgress current={3} />
 
       <h1
@@ -92,7 +157,7 @@ export default function DiaryNewMoodPage() {
             transition: 'background-color 0.2s',
           }}
         >
-          다음
+          {createDiary.isPending ? '...' : '다음'}
         </button>
       </div>
     </div>

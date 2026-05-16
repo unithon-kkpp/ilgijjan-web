@@ -185,7 +185,6 @@ function DiaryRow({ item, onClick }: { item: DiaryListItem; onClick: () => void 
 
 export default function DiaryListPage() {
   const navigate = useNavigate()
-  const today = getTodayString()
   const now = new Date()
   const currentYear = now.getFullYear()
   const currentMonth = now.getMonth() + 1

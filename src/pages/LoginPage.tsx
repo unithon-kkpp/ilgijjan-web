@@ -5,7 +5,7 @@ export default function LoginPage() {
   const { loginWithKakao } = useAuth()
 
   return (
-    <div className="relative w-full h-screen overflow-hidden bg-[#eef9ff] flex flex-col items-center justify-center">
+    <div className="relative w-full flex-1 overflow-hidden bg-[#eef9ff] flex flex-col items-center justify-center">
       {/* 구름 - 좌상단 */}
       <div className="absolute left-[-55px] top-[15%] rotate-[5.34deg]">
         <img src="/images/cloud.svg" alt="" width={182} height={92} className="drop-shadow-[0_0_4px_rgba(145,204,255,0.2)]" />

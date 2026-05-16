@@ -5,5 +5,6 @@ export function useDiary(diaryId: number) {
   return useQuery({
     queryKey: ['diaries', diaryId],
     queryFn: () => diaryApi.getOne(diaryId),
+    enabled: Number.isFinite(diaryId),
   })
 }

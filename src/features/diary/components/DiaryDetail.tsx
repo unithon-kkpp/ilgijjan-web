@@ -80,11 +80,15 @@ function HeartIcon({
 }
 
 function BookIcon({ size = 41 }: { size?: number }) {
-  // Figma solar:book-bold-duotone 벡터 3개 합성
+  // Figma solar:book-bold-duotone 벡터 3개 합성.
+  // SVG 에 width="100%" height="100%" 명시 — iOS Safari/카톡 인앱 등에서 누락 시
+  // viewBox 원본 크기로 렌더되면서 컨테이너 밖으로 삐져나오는 문제 방지
   return (
     <div className="relative shrink-0" style={{ width: size, height: size }}>
       {/* 뒤표지 (어두운 파랑) */}
       <svg
+        width="100%"
+        height="100%"
         preserveAspectRatio="none"
         viewBox="0 0 27.3325 6.83333"
         fill="none"
@@ -98,6 +102,8 @@ function BookIcon({ size = 41 }: { size?: number }) {
       </svg>
       {/* 책 본체 (밝은 파랑) */}
       <svg
+        width="100%"
+        height="100%"
         preserveAspectRatio="none"
         viewBox="0 0 27.3333 30.2375"
         fill="none"
@@ -111,6 +117,8 @@ function BookIcon({ size = 41 }: { size?: number }) {
       </svg>
       {/* 책 안 두 줄 */}
       <svg
+        width="100%"
+        height="100%"
         preserveAspectRatio="none"
         viewBox="0 0 16.2292 8.54167"
         fill="none"
@@ -799,7 +807,7 @@ export default function DiaryDetail({ diary }: DiaryDetailProps) {
               onClick={() => setOriginalOpen(true)}
               aria-label="원본 보기"
             >
-              <BookIcon size={36} />
+              <BookIcon size={41} />
             </button>
           )}
         </div>

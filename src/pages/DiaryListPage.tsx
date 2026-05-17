@@ -147,13 +147,12 @@ function FilterPicker({
                 onChange(item)
                 requestClose()
               }}
-              className="w-full py-[14px] text-center"
+              className="w-full py-[14px] text-center transition-colors duration-150 ease-out hover:bg-black/5 active:bg-black/10"
               style={{
                 fontFamily: "'NanumSquareRound', sans-serif",
                 fontSize: 18,
                 fontWeight: value === item ? 800 : 400,
                 color: value === item ? '#91ccff' : '#424242',
-                backgroundColor: 'transparent',
               }}
             >
               {type === 'month' ? `${item}월` : String(item)}
@@ -297,7 +296,11 @@ export default function DiaryListPage() {
     setMonth(newMonth)
   }
 
-  if (userLoading || diariesLoading) {
+  // userLoading 만 가드 — diariesLoading 까지 가드하면 월 변경 시 페이지 전체가
+  // 빈 div 로 대체되며 FilterPicker 가 강제 unmount → 닫힘 애니메이션이 끝나기 전
+  // 데이터 도착으로 페이지 재mount → picker 가 다시 올라오는 것처럼 보이는 버그가 생김.
+  // 월 전환 중 일기 데이터는 useDiaries 의 placeholderData(keepPreviousData) 가 이전 값을 유지함
+  if (userLoading) {
     return <div className="w-full flex-1" style={{ backgroundColor: '#faf9f5' }} />
   }
 

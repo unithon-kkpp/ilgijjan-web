@@ -189,10 +189,10 @@ export default function ProfilePage() {
         >
           계정 관리
         </p>
-        <div className="mt-6 space-y-2 text-left">
-          <button
+        <div className="mt-6 space-y-2">
+          <a
             onClick={() => setLogoutOpen(true)}
-            className="-mx-3 px-3 py-2 block w-[calc(100%+1.5rem)] text-left rounded-lg transition-colors hover:bg-black/5 active:bg-black/10"
+            className="-mx-3 px-3 py-2 flex items-center rounded-lg transition-colors hover:bg-black/5 active:bg-black/10 cursor-pointer"
           >
             <span
               className="text-[16px]"
@@ -200,10 +200,10 @@ export default function ProfilePage() {
             >
               로그아웃
             </span>
-          </button>
-          <button
+          </a>
+          <a
             onClick={() => setWithdrawOpen(true)}
-            className="-mx-3 px-3 py-2 block w-[calc(100%+1.5rem)] text-left rounded-lg transition-colors hover:bg-black/5 active:bg-black/10"
+            className="-mx-3 px-3 py-2 flex items-center rounded-lg transition-colors hover:bg-black/5 active:bg-black/10 cursor-pointer"
           >
             <span
               className="text-[16px]"
@@ -211,7 +211,7 @@ export default function ProfilePage() {
             >
               계정 탈퇴
             </span>
-          </button>
+          </a>
         </div>
       </div>
 

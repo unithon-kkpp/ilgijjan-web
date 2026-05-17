@@ -227,7 +227,7 @@ export default function PublicFeedPage() {
         ) : (
           <>
             {/* 좌우 패딩 — 좌 24, 우 7. 우측은 스크롤바가 여백에 포함되도록 작게 */}
-            <div className="grid grid-cols-2 gap-x-[22px] pt-[28px] pb-[20px]" style={{ paddingLeft: 24, paddingRight: 7 }}>
+            <div className="grid grid-cols-2 gap-x-[22px] pt-[28px] pb-[20px]" style={{ paddingLeft: 24, paddingRight: 24 }}>
               {/* 화면 좌측 — 80px 아래로 오프셋 (홀수 인덱스) */}
               <div className="flex flex-col gap-[24px]" style={{ marginTop: 80 }}>
                 {leftCol.map((item) => (

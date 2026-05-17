@@ -799,7 +799,7 @@ export default function DiaryDetail({ diary }: DiaryDetailProps) {
               onClick={() => setOriginalOpen(true)}
               aria-label="원본 보기"
             >
-              <BookIcon size={41} />
+              <BookIcon size={36} />
             </button>
           )}
         </div>

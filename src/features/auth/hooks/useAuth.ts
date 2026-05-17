@@ -18,9 +18,11 @@ export function useAuth() {
   }
 
   const loginWithKakao = () => {
+    // throughTalk: true → 모바일에 카카오톡 앱 설치돼있으면 앱 호출로 인증, 없으면 웹뷰 자동 폴백.
+    // 데스크톱에선 무시되고 웹뷰 사용.
     window.Kakao.Auth.authorize({
       redirectUri: `${window.location.origin}/oauth/kakao`,
-      throughTalk: false,
+      throughTalk: true,
     })
   }
 

@@ -306,7 +306,7 @@ export default function DiaryListPage() {
 
   return (
     <>
-      <div className="w-full flex flex-col overflow-hidden" style={{ backgroundColor: '#faf9f5', height: '100%' }}>
+      <div className="w-full flex flex-1 flex-col" style={{ backgroundColor: '#faf9f5' }}>
         {/* 상단 설정 아이콘 */}
         <div className="shrink-0 flex items-center px-[24px] pt-[20px] pb-1">
           <button
@@ -445,10 +445,10 @@ export default function DiaryListPage() {
           <FilterPill label={`${month}월`} onClick={() => setPickerOpen('month')} />
         </div>
 
-        {/* 일기 목록 — pt-2 는 첫 row hover 배경이 위로 8px 뻗을 때 overflow에 잘리지 않게 하려는 여유
-            min-h-0: flex item 기본 min-height: auto 때문에 overflow-y-auto 가 작동 안 하는 문제 방지 */}
+        {/* 일기 목록 — pt-2 는 첫 row hover 배경이 위로 8px 뻗을 때 잘리지 않게 하려는 여유
+            자연 스크롤: 내부 overflow-y-auto 안 쓰고 body 스크롤 그대로 사용 */}
         <div
-          className="flex-1 min-h-0 overflow-y-auto mt-4 pt-2 pb-8"
+          className="mt-4 pt-2 pb-8"
           style={{ paddingLeft: 37, paddingRight: 20 }}
         >
           {diaries.length === 0 ? (

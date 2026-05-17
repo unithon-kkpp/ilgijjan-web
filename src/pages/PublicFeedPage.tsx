@@ -124,19 +124,18 @@ export default function PublicFeedPage() {
     fetchNextPage,
   } = usePublicDiaries(20)
 
-  const scrollRef = useRef<HTMLDivElement>(null)
   const sentinelRef = useRef<HTMLDivElement>(null)
   useEffect(() => {
     const sentinel = sentinelRef.current
-    const root = scrollRef.current
-    if (!sentinel || !root || !hasNextPage) return
+    if (!sentinel || !hasNextPage) return
+    // root: null = 뷰포트 기준 (자연 스크롤이라 내부 스크롤 컨테이너 없음)
     const observer = new IntersectionObserver(
       (entries) => {
         if (entries[0].isIntersecting && !isFetchingNextPage) {
           fetchNextPage()
         }
       },
-      { root, rootMargin: '200px' },
+      { rootMargin: '200px' },
     )
     observer.observe(sentinel)
     return () => observer.disconnect()
@@ -156,8 +155,8 @@ export default function PublicFeedPage() {
 
   return (
     <div
-      className="w-full flex flex-col overflow-hidden"
-      style={{ backgroundColor: '#faf9f5', height: '100%' }}
+      className="w-full flex flex-1 flex-col"
+      style={{ backgroundColor: '#faf9f5' }}
     >
       {/* 상단 뒤로가기 */}
       <div className="shrink-0 flex items-center px-[20px] pt-[18px] pb-[6px] relative z-10">
@@ -197,10 +196,9 @@ export default function PublicFeedPage() {
       </div>
 
       {/* 파란 영역 — 스태거 그리드 + 무한 스크롤
-          min-h-0: flex item 기본 min-height: auto 때문에 overflow-y-auto 가 작동 안 하는 문제 방지 */}
+          자연 스크롤: 내부 overflow-y-auto 안 쓰고 body 스크롤 그대로 사용. flex-1 로 남은 공간 채워서 빈 배경 안 보이게 */}
       <div
-        ref={scrollRef}
-        className="flex-1 min-h-0 overflow-y-auto"
+        className="flex-1"
         style={{ backgroundColor: '#e8f4ff' }}
       >
         {isLoading ? (

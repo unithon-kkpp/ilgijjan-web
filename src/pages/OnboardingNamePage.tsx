@@ -34,7 +34,7 @@ export default function OnboardingNamePage() {
 
   return (
     <div
-      className="w-full h-full flex flex-col items-center justify-center gap-10"
+      className="w-full flex-1 flex flex-col items-center justify-center gap-10"
       style={{ backgroundColor: '#faf9f5' }}
     >
       {/* 제목 */}

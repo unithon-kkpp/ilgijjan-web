@@ -62,7 +62,7 @@ export default function DiaryNewPhotoPage() {
   const canProceed = !!draft.photoUrl && !upload.isPending
 
   return (
-    <div className="relative w-full h-full" style={{ backgroundColor: '#faf9f5' }}>
+    <div className="relative w-full flex-1" style={{ backgroundColor: '#faf9f5' }}>
       <StepProgress current={1} />
 
       <div className="flex flex-col items-center pt-[140px]">

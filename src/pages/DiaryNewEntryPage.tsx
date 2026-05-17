@@ -59,7 +59,7 @@ export default function DiaryNewEntryPage() {
 
   return (
     <div
-      className="relative w-full h-full flex flex-col"
+      className="relative w-full flex-1 flex flex-col"
       style={{ backgroundColor: '#eef9ff' }}
     >
       {/* ── 상단 하늘 영역 (고정 높이) ── */}

@@ -52,7 +52,7 @@ export default function DiaryNewLoadingPage() {
   const charCfg = CHARACTER_LOADING[character]
 
   return (
-    <div className="relative w-full h-full overflow-hidden" style={{ backgroundColor: '#eef9ff' }}>
+    <div className="relative w-full flex-1 overflow-hidden" style={{ backgroundColor: '#eef9ff' }}>
       {/* 캐릭터 점프 애니메이션 keyframes */}
       <style>{`
         @keyframes jjan-jump {

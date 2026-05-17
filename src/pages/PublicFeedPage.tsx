@@ -75,7 +75,12 @@ function PublicDiaryCard({
   onClick: () => void
 }) {
   return (
-    <button onClick={onClick} className="block w-full text-left group">
+    <button onClick={onClick} className="group relative z-0 block w-full text-left">
+      {/* hover 배경 — 카드 외곽 8px 여유로 살짝 확장. DiaryListPage 와 동일한 패턴 */}
+      <span
+        aria-hidden
+        className="pointer-events-none absolute -inset-x-2 -inset-y-2 -z-10 rounded-[14px] transition-colors duration-150 ease-out group-hover:bg-black/5 group-active:bg-black/10"
+      />
       <div
         className="w-full aspect-square overflow-hidden rounded-[10px] bg-white"
         style={{ boxShadow: '0px 0px 6px 0px rgba(0,0,0,0.1)' }}
@@ -83,7 +88,7 @@ function PublicDiaryCard({
         <img
           src={item.imageUrl}
           alt=""
-          className="w-full h-full object-cover transition-transform duration-150 ease-out group-hover:scale-[1.02]"
+          className="w-full h-full object-cover"
         />
       </div>
       <p

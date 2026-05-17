@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import confetti from 'canvas-confetti'
 import { useDiary } from '@/features/diary/hooks/useDiary'
@@ -50,6 +50,10 @@ export default function DiaryDetailPage() {
 
   const { data: diary, isLoading, isError } = useDiary(diaryId)
 
+  // 마운트 시점의 justCreated 값을 캡처. 아래 useEffect 가 state 를 즉시 비우기 때문에,
+  // 뒤로가기 분기에 쓰려면 따로 보관해야 함.
+  const [fromCreate] = useState<boolean>(() => !!location.state?.justCreated)
+
   useEffect(() => {
     if (location.state?.justCreated) {
       fireCelebrationConfetti()
@@ -85,5 +89,5 @@ export default function DiaryDetailPage() {
     )
   }
 
-  return <DiaryDetail diary={diary} />
+  return <DiaryDetail diary={diary} fromCreate={fromCreate} />
 }

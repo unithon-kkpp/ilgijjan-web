@@ -9,6 +9,8 @@ import MoodIcon from './MoodIcon'
 
 interface DiaryDetailProps {
   diary: Diary
+  // 생성 직후 진입한 경우 true. 뒤로가기 시 작성 단계로 돌아가지 않고 일기 목록으로 이동.
+  fromCreate?: boolean
 }
 
 const GRASS_GREEN = '#CDE89B'
@@ -577,8 +579,15 @@ function OriginalContentModal({ diary, onClose }: { diary: Diary; onClose: () =>
   )
 }
 
-export default function DiaryDetail({ diary }: DiaryDetailProps) {
+export default function DiaryDetail({ diary, fromCreate = false }: DiaryDetailProps) {
   const navigate = useNavigate()
+
+  // 생성 직후엔 history 가 [..., photo, weather, detail] 라 navigate(-1) 가 weather 로 빠짐.
+  // 이 경우만 일기 목록으로 직행. 평소엔 일반 뒤로가기.
+  const handleBack = () => {
+    if (fromCreate) navigate('/', { replace: true })
+    else navigate(-1)
+  }
 
   const hasLyrics = !!diary.lyrics
   const hasImage = !!diary.imageUrl
@@ -621,7 +630,7 @@ export default function DiaryDetail({ diary }: DiaryDetailProps) {
       <div className="shrink-0 flex items-center justify-between px-5 pt-5 pb-2">
         <button
           className="rounded-full p-2 -m-2 transition-all duration-150 ease-out hover:bg-black/5 active:bg-black/10"
-          onClick={() => navigate(-1)}
+          onClick={handleBack}
           aria-label="뒤로가기"
         >
           <ChevronLeft size={32} />

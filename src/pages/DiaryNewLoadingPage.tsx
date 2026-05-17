@@ -28,6 +28,18 @@ export default function DiaryNewLoadingPage() {
 
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
 
+  // 브라우저 뒤로가기 가드 — 로딩 중엔 weather/mood 등 작성 단계로 못 돌아가게 막고,
+  // 무조건 일기 목록(/)으로 보냄. sentinel entry 를 history 에 한 칸 더 쌓고,
+  // 그게 pop 될 때(=사용자가 back 누른 순간) popstate 로 감지해 목록으로 replace.
+  useEffect(() => {
+    window.history.pushState(null, '', window.location.href)
+    const handlePopState = () => {
+      navigate('/', { replace: true })
+    }
+    window.addEventListener('popstate', handlePopState)
+    return () => window.removeEventListener('popstate', handlePopState)
+  }, [navigate])
+
   // 상태 변화에 따라 분기
   useEffect(() => {
     const status = statusData?.status

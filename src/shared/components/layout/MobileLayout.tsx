@@ -1,6 +1,14 @@
 import { Outlet } from 'react-router-dom'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import ToastContainer from '@/shared/components/ui/ToastContainer'
+
+const FRAME_W = 390
+const FRAME_H = 844
+
+function computeScale() {
+  if (typeof window === 'undefined') return 1
+  return Math.min(1, window.innerHeight / FRAME_H, window.innerWidth / FRAME_W)
+}
 
 function checkTouch() {
   if (typeof window === 'undefined') return false
@@ -8,24 +16,51 @@ function checkTouch() {
 }
 
 /**
- * 자연 스크롤 패턴 (인스타/트위터 모바일웹 방식)
- * - 노트북(마우스): 가운데 390px 폭 컬럼, 좌우 회색 배경, 그림자
- * - 휴대폰(터치): 100% 폭 풀스크린
- * - 페이지 높이 고정 안 함. 콘텐츠가 길면 body 가 자연스럽게 스크롤됨.
- *   transform scale, 100dvh 잠금, internal overflow-y-auto 같은 거 다 안 씀
+ * 노트북/데스크톱(마우스): 안쪽 콘텐츠는 항상 390x844 로 정확히 렌더하고,
+ *   CSS transform: scale 로 시각적으로만 줄여서 뷰포트에 딱 맞춤.
+ *   - 안쪽 레이아웃은 절대 안 깨짐 (px 가 그대로라서)
+ *   - 뷰포트 작으면 그냥 작게 보이고, 한 화면에 다 들어옴
+ *   - 창 크기 바뀌면 scale 만 다시 계산
+ * 터치 디바이스(휴대폰): 풀스크린(100vw x 100dvh) — 폰은 이미 모바일 크기니까 스케일 안 함
  */
 export default function MobileLayout() {
+  const [scale, setScale] = useState(computeScale)
   const [isTouch] = useState(checkTouch)
 
-  return (
-    <div className="min-h-[100dvh] bg-gray-200 flex justify-center">
-      <div
-        className={`w-full bg-white flex flex-col min-h-[100dvh] relative ${
-          isTouch ? '' : 'max-w-[390px] shadow-xl'
-        }`}
-      >
+  useEffect(() => {
+    if (isTouch) return
+    const onResize = () => setScale(computeScale())
+    window.addEventListener('resize', onResize)
+    return () => window.removeEventListener('resize', onResize)
+  }, [isTouch])
+
+  if (isTouch) {
+    return (
+      <div className="relative w-screen h-[100dvh] flex flex-col bg-white overflow-hidden">
         <Outlet />
         <ToastContainer />
+      </div>
+    )
+  }
+
+  return (
+    <div className="min-h-[100dvh] flex bg-gray-200">
+      <div
+        className="m-auto shrink-0 relative shadow-xl overflow-hidden"
+        style={{ width: FRAME_W * scale, height: FRAME_H * scale }}
+      >
+        <div
+          className="absolute top-0 left-0 flex flex-col bg-white overflow-hidden"
+          style={{
+            width: FRAME_W,
+            height: FRAME_H,
+            transform: `scale(${scale})`,
+            transformOrigin: 'top left',
+          }}
+        >
+          <Outlet />
+          <ToastContainer />
+        </div>
       </div>
     </div>
   )

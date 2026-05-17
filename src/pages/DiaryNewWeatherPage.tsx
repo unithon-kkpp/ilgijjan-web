@@ -19,7 +19,7 @@ export default function DiaryNewWeatherPage() {
   const canProceed = !!draft.weather
 
   return (
-    <div className="relative w-full flex-1" style={{ backgroundColor: '#faf9f5' }}>
+    <div className="relative w-full h-full" style={{ backgroundColor: '#faf9f5' }}>
       <StepProgress current={2} />
 
       <h1

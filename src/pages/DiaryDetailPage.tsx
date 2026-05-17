@@ -65,7 +65,7 @@ export default function DiaryDetailPage() {
   if (isError || !diary) {
     return (
       <div
-        className="w-full flex-1 flex flex-col items-center justify-center gap-4"
+        className="w-full h-full flex flex-col items-center justify-center gap-4"
         style={{ backgroundColor: '#FAF9F5' }}
       >
         <p

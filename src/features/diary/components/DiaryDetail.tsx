@@ -625,7 +625,7 @@ export default function DiaryDetail({ diary }: DiaryDetailProps) {
 
   return (
     <div
-      className="relative w-full flex-1 overflow-hidden flex flex-col"
+      className="relative w-full h-full overflow-hidden flex flex-col"
       style={{ backgroundColor: '#FAF9F5' }}
     >
       {/* 헤더 — 뒤로가기 + 휴지통 */}

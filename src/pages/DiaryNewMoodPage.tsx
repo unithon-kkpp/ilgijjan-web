@@ -78,7 +78,7 @@ export default function DiaryNewMoodPage() {
   }
 
   return (
-    <div className="relative w-full flex-1" style={{ backgroundColor: '#faf9f5' }}>
+    <div className="relative w-full h-full" style={{ backgroundColor: '#faf9f5' }}>
       {/* 토스트 (INSUFFICIENT_NOTES 등 에러 안내) */}
       {toastMessage && (
         <div

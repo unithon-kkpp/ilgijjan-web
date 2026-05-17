@@ -104,7 +104,7 @@ export default function OnboardingFriendsPage() {
 
   return (
     <div
-      className="w-full flex-1 flex flex-col items-center justify-center gap-8"
+      className="w-full h-full flex flex-col items-center justify-center gap-8"
       style={{ backgroundColor: '#faf9f5' }}
     >
       {/* 제목 */}

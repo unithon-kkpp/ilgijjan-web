@@ -10,7 +10,7 @@ export default function DiaryNewWritePage() {
   const canProceed = draft.text.trim().length > 0
 
   return (
-    <div className="relative w-full flex-1 flex flex-col" style={{ backgroundColor: '#faf9f5' }}>
+    <div className="relative w-full h-full flex flex-col" style={{ backgroundColor: '#faf9f5' }}>
       <StepProgress current={1} />
 
       <h1

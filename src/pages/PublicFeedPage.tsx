@@ -156,7 +156,7 @@ export default function PublicFeedPage() {
 
   return (
     <div
-      className="w-full flex flex-1 flex-col"
+      className="w-full flex flex-1 flex-col overflow-hidden"
       style={{ backgroundColor: '#faf9f5' }}
     >
       {/* 상단 뒤로가기 */}

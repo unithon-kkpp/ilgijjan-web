@@ -19,9 +19,9 @@ function checkTouch() {
  * 노트북/데스크톱(마우스): 안쪽 콘텐츠는 항상 390x844 로 정확히 렌더하고,
  *   CSS transform: scale 로 시각적으로만 줄여서 뷰포트에 딱 맞춤.
  *   - 안쪽 레이아웃은 절대 안 깨짐 (px 가 그대로라서)
- *   - 뷰포트 작으면 그냥 작게 보이고, 한 화면에 다 들어옴
  *   - 창 크기 바뀌면 scale 만 다시 계산
- * 터치 디바이스(휴대폰): 풀스크린(100vw x 100dvh) — 폰은 이미 모바일 크기니까 스케일 안 함
+ * 터치 디바이스(휴대폰): 100vw + min-h-[100dvh], overflow 잠금 해제.
+ *   - 콘텐츠가 viewport 보다 길면 body 가 자연스럽게 스크롤됨
  */
 export default function MobileLayout() {
   const [scale, setScale] = useState(computeScale)
@@ -35,10 +35,14 @@ export default function MobileLayout() {
   }, [isTouch])
 
   if (isTouch) {
-    // 모바일: 풀스크린 폭 + 최소 100dvh 높이. overflow-hidden 안 잠가서 콘텐츠가 길면 body 가 자연스럽게 스크롤됨.
-    // 내부 flex-1 overflow-y-auto 영역은 데스크톱 고정 프레임에서만 활성화되고, 모바일에선 그냥 콘텐츠 사이즈로 흘러감.
+    // 모바일: 390:844 비율 유지. 높이 = 100vw * 844/390 (전화기 폭에 맞춰 비율 계산).
+    //  - 폰 viewport 가 이 높이보다 짧으면 body 스크롤
+    //  - height 가 명시(픽셀 계산값)라서 자식 flex-1 + overflow-y-auto 내부 스크롤 정상 작동
     return (
-      <div className="relative w-screen min-h-[100dvh] flex flex-col bg-white">
+      <div
+        className="relative w-screen flex flex-col bg-white"
+        style={{ height: 'calc(100vw * 844 / 390)' }}
+      >
         <Outlet />
         <ToastContainer />
       </div>

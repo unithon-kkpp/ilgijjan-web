@@ -306,7 +306,7 @@ export default function DiaryListPage() {
 
   return (
     <>
-      <div className="w-full flex flex-col overflow-hidden" style={{ backgroundColor: '#faf9f5', height: '100%' }}>
+      <div className="w-full flex flex-1 flex-col overflow-hidden" style={{ backgroundColor: '#faf9f5' }}>
         {/* 상단 설정 아이콘 */}
         <div className="shrink-0 flex items-center px-[24px] pt-[20px] pb-1">
           <button

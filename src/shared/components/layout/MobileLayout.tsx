@@ -35,8 +35,10 @@ export default function MobileLayout() {
   }, [isTouch])
 
   if (isTouch) {
+    // 모바일: 풀스크린 폭 + 최소 100dvh 높이. overflow-hidden 안 잠가서 콘텐츠가 길면 body 가 자연스럽게 스크롤됨.
+    // 내부 flex-1 overflow-y-auto 영역은 데스크톱 고정 프레임에서만 활성화되고, 모바일에선 그냥 콘텐츠 사이즈로 흘러감.
     return (
-      <div className="relative w-screen h-[100dvh] flex flex-col bg-white overflow-hidden">
+      <div className="relative w-screen min-h-[100dvh] flex flex-col bg-white">
         <Outlet />
         <ToastContainer />
       </div>

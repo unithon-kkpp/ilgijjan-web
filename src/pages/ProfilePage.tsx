@@ -6,8 +6,8 @@ import { useToast } from '@/shared/hooks/useToast'
 import ConfirmDialog from '@/shared/components/ui/ConfirmDialog'
 import type { Character } from '@/features/user/types/user.types'
 
-const INSTAGRAM_URL = '#'
-const OPENCHAT_URL = '#'
+const INSTAGRAM_URL = 'https://www.instagram.com/diary.jjan'
+const OPENCHAT_URL = 'https://open.kakao.com/o/s8lPHKoi'
 
 const CHARACTER_THEME: Record<Character, { panelBg: string; img: string; scale: number }> = {
   DODO: { panelBg: '#e4f0f8', img: '/images/character-dodo.png', scale: 1 },
@@ -38,15 +38,6 @@ function PencilIcon({ size }: { size: number }) {
         strokeWidth="1.2"
         strokeLinejoin="round"
       />
-    </svg>
-  )
-}
-
-function ExternalLinkIcon() {
-  return (
-    <svg width="28" height="28" viewBox="0 0 28 28" fill="none" aria-hidden>
-      <circle cx="14" cy="14" r="11" stroke="#424242" strokeWidth="1.6" fill="none" />
-      <path d="M9 19 L19 9" stroke="#424242" strokeWidth="1.6" strokeLinecap="round" />
     </svg>
   )
 }
@@ -167,7 +158,7 @@ export default function ProfilePage() {
             href={INSTAGRAM_URL}
             target="_blank"
             rel="noopener noreferrer"
-            className="-mx-3 px-3 py-2 flex items-center justify-between rounded-lg transition-colors hover:bg-black/5 active:bg-black/10"
+            className="-mx-3 px-3 py-2 flex items-center rounded-lg transition-colors hover:bg-black/5 active:bg-black/10"
           >
             <span
               className="text-[16px]"
@@ -175,13 +166,12 @@ export default function ProfilePage() {
             >
               Instagram
             </span>
-            <ExternalLinkIcon />
           </a>
           <a
             href={OPENCHAT_URL}
             target="_blank"
             rel="noopener noreferrer"
-            className="-mx-3 px-3 py-2 flex items-center justify-between rounded-lg transition-colors hover:bg-black/5 active:bg-black/10"
+            className="-mx-3 px-3 py-2 flex items-center rounded-lg transition-colors hover:bg-black/5 active:bg-black/10"
           >
             <span
               className="text-[16px]"
@@ -189,7 +179,6 @@ export default function ProfilePage() {
             >
               오픈채팅
             </span>
-            <ExternalLinkIcon />
           </a>
         </div>
 

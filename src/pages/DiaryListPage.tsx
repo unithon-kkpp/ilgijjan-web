@@ -266,7 +266,7 @@ export default function DiaryListPage() {
   const [pickerOpen, setPickerOpen] = useState<PickerType | null>(null)
 
   const { data: user, isLoading: userLoading } = useUser()
-  const { data: diaryData, isLoading: diariesLoading } = useDiaries(year, month)
+  const { data: diaryData } = useDiaries(year, month)
 
   if (!userLoading && user && !user.name) {
     navigate('/onboarding/name', { replace: true })

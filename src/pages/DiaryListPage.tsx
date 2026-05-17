@@ -443,7 +443,10 @@ export default function DiaryListPage() {
         </div>
 
         {/* 일기 목록 — pt-2 는 첫 row hover 배경이 위로 8px 뻗을 때 overflow에 잘리지 않게 하려는 여유 */}
-        <div className="flex-1 overflow-y-auto px-[37px] mt-4 pt-2 pb-8">
+        <div
+          className="flex-1 overflow-y-auto mt-4 pt-2 pb-8"
+          style={{ paddingLeft: 37, paddingRight: 20 }}
+        >
           {diaries.length === 0 ? (
             <p
               className="text-center pt-16 text-[#959595] text-[14px]"

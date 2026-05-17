@@ -54,3 +54,19 @@ export interface DiaryStatusResponse {
   diaryId: number
   status: DiaryGenerationStatus
 }
+
+// 공개 일기 목록(피드)의 단일 아이템 — 본인 일기 목록과 필드 구성이 달라 별도 타입
+export interface PublicDiaryItem {
+  id: number
+  date: string
+  imageUrl: string
+  authorName: string
+  introLines: string | null
+}
+
+// 커서 기반 무한 스크롤 응답
+export interface PublicDiaryListResponse {
+  diaryList: PublicDiaryItem[]
+  lastId: number | null
+  hasNext: boolean
+}

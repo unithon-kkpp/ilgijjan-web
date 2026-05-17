@@ -196,10 +196,11 @@ export default function PublicFeedPage() {
         />
       </div>
 
-      {/* 파란 영역 — 스태거 그리드 + 무한 스크롤 */}
+      {/* 파란 영역 — 스태거 그리드 + 무한 스크롤
+          min-h-0: flex item 기본 min-height: auto 때문에 overflow-y-auto 가 작동 안 하는 문제 방지 */}
       <div
         ref={scrollRef}
-        className="flex-1 overflow-y-auto"
+        className="flex-1 min-h-0 overflow-y-auto"
         style={{ backgroundColor: '#e8f4ff' }}
       >
         {isLoading ? (

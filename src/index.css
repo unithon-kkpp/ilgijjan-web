@@ -11,6 +11,13 @@
 @tailwind components;
 @tailwind utilities;
 
+/* body 배경을 회색으로 깔아둠 — 데스크톱에서 창이 프레임보다 작아져 가로/세로 스크롤이 생겨도
+   스크롤 끝에 흰색이 비치지 않고 회색이 끝까지 이어지도록 */
+body {
+  background-color: #e5e7eb; /* gray-200 */
+}
+
+
 /* 모든 button 공통 누름 모션 — 컴포넌트가 별도 active:scale-* 를 지정하면 그쪽이 우선 */
 @layer base {
   button {

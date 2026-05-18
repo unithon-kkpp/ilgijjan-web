@@ -8,7 +8,7 @@ import BackButton from '@/shared/components/ui/BackButton'
 import type { Character } from '@/features/user/types/user.types'
 
 const INSTAGRAM_URL = 'https://www.instagram.com/diary.jjan'
-const OPENCHAT_URL = 'https://open.kakao.com/o/s8lPHKoi'
+const KAKAO_CHANNEL_URL = 'https://pf.kakao.com/_FPrsX/chat'
 
 const CHARACTER_THEME: Record<Character, { panelBg: string; img: string; scale: number }> = {
   DODO: { panelBg: '#e4f0f8', img: '/images/character-dodo.png', scale: 1 },
@@ -153,7 +153,7 @@ export default function ProfilePage() {
             </span>
           </a>
           <a
-            href={OPENCHAT_URL}
+            href={KAKAO_CHANNEL_URL}
             target="_blank"
             rel="noopener noreferrer"
             className="-mx-3 px-3 py-2 flex items-center rounded-lg transition-colors hover:bg-black/5 active:bg-black/10"
@@ -162,7 +162,7 @@ export default function ProfilePage() {
               className="text-[16px]"
               style={{ fontFamily: "'NanumSquareRound', sans-serif", fontWeight: 700, color: '#424242' }}
             >
-              오픈채팅
+              카카오톡 채널
             </span>
           </a>
         </div>

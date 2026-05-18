@@ -50,7 +50,7 @@ export default function DiaryListPage() {
     ? CHARACTER_HERO[user.character]
     : { bg: '#e9f5ff', img: '', w: 90, h: 200, offsetY: 0 }
   const speechLines = canCreateSong
-    ? [`${user?.name ?? ''}아, 안녕`, '오늘은 어땠어?']
+    ? [`${user?.name ?? ''}, 안녕`, '오늘은 어땠어?']
     : ['오늘 너의 이야기,', '정말 잘 들었어!']
 
   function handleYearChange(newYear: number) {

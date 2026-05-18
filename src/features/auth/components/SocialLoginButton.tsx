@@ -10,8 +10,7 @@ export default function SocialLoginButton({ onClick }: SocialLoginButtonProps) {
   return (
     <button
       onClick={onClick}
-      className="flex items-center justify-center gap-3 w-[292px] h-[63px] bg-[#fee500] rounded-[20px] font-bold text-[20px] text-black"
-      style={{ fontFamily: "'NanumSquareRound', sans-serif" }}
+      className="font-nanum flex items-center justify-center gap-3 w-[292px] h-[63px] bg-jjan-kakao-yellow rounded-[20px] font-bold text-[20px] text-black"
     >
       <KakaoIcon />
       kakao로 시작하기

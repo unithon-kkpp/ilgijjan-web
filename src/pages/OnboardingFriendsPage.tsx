@@ -108,10 +108,7 @@ export default function OnboardingFriendsPage() {
       style={{ backgroundColor: '#faf9f5' }}
     >
       {/* 제목 */}
-      <p
-        className="text-center text-[35px] text-[#424242] leading-normal"
-        style={{ fontFamily: "'AndongKaturi', sans-serif" }}
-      >
+      <p className="font-katuri text-center text-[35px] text-[#424242] leading-normal">
         너와 함께할
         <br />
         친구를 골라줘!

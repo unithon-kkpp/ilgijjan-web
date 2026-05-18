@@ -39,10 +39,7 @@ export default function OnboardingNamePage() {
       style={{ backgroundColor: '#faf9f5' }}
     >
       {/* 제목 */}
-      <p
-        className="text-center text-[35px] text-[#424242] leading-normal"
-        style={{ fontFamily: "'AndongKaturi', sans-serif" }}
-      >
+      <p className="font-katuri text-center text-[35px] text-[#424242] leading-normal">
         만나서 반가워,
         <br />
         너의 이름은 뭐야?
@@ -69,8 +66,7 @@ export default function OnboardingNamePage() {
           onKeyDown={(e) => e.key === 'Enter' && handleNext()}
           placeholder="이름 입력"
           maxLength={10}
-          className="w-full text-center text-[35px] text-black bg-transparent outline-none placeholder:text-gray-300"
-          style={{ fontFamily: "'AndongKaturi', sans-serif" }}
+          className="font-katuri w-full text-center text-[35px] text-black bg-transparent outline-none placeholder:text-gray-300"
         />
       </div>
 

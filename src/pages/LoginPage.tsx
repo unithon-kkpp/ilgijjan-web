@@ -24,18 +24,12 @@ export default function LoginPage() {
       {/* 메인 컨텐츠 */}
       <div className="relative z-10 flex flex-col items-center gap-6">
         {/* 타이틀 */}
-        <p
-          className="text-[50px] text-[rgba(0,0,0,0.9)] leading-normal"
-          style={{ fontFamily: "'AndongKaturi', sans-serif" }}
-        >
+        <p className="font-katuri text-[50px] text-[rgba(0,0,0,0.9)] leading-normal">
           일기짠
         </p>
 
         {/* 안내 문구 */}
-        <p
-          className="text-[14px] text-[rgba(0,0,0,0.9)] font-bold leading-normal whitespace-nowrap"
-          style={{ fontFamily: "'NanumSquareRound', sans-serif" }}
-        >
+        <p className="font-nanum text-[14px] text-[rgba(0,0,0,0.9)] font-bold leading-normal whitespace-nowrap">
           일기짠을 시작하기 위해 로그인이 필요해요 :)
         </p>
 

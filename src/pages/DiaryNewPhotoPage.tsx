@@ -83,10 +83,7 @@ export default function DiaryNewPhotoPage() {
         </div>
 
         {error && (
-          <p
-            className="mt-3 text-[14px] text-[#dd2929] text-center"
-            style={{ fontFamily: "'NanumSquareRound', sans-serif" }}
-          >
+          <p className="font-nanum mt-3 text-[14px] text-[#dd2929] text-center">
             {error}
           </p>
         )}

@@ -401,10 +401,7 @@ export default function DiaryListPage() {
             }}
           >
             <img src="/images/icon-music.svg" alt="" style={{ width: 24, height: 24 }} />
-            <span
-              className="text-[24px] text-[#424242]"
-              style={{ fontFamily: "'AndongKaturi', sans-serif" }}
-            >
+            <span className="font-katuri text-[24px] text-[#424242]">
               {canCreateSong ? '오늘의 노래 만들기' : '내일 다시 만들 수 있어요'}
             </span>
           </button>
@@ -447,10 +444,7 @@ export default function DiaryListPage() {
           style={{ paddingLeft: 37, paddingRight: 37 }}
         >
           {diaries.length === 0 ? (
-            <p
-              className="text-center pt-16 text-[#959595] text-[14px]"
-              style={{ fontFamily: "'NanumSquareRound', sans-serif" }}
-            >
+            <p className="font-nanum text-center pt-16 text-[#959595] text-[14px]">
               이 달의 일기가 없어요
             </p>
           ) : (

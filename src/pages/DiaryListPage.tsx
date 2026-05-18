@@ -2,11 +2,14 @@ import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useUser } from '@/features/user/hooks/useUser'
 import { useDiaries } from '@/features/diary/hooks/useDiaries'
-import { useExitAnimation } from '@/shared/hooks/useExitAnimation'
-import WeatherIcon from '@/features/diary/components/WeatherIcon'
-import MoodIcon from '@/features/diary/components/MoodIcon'
+import { DiaryRow, PendingDiaryRow } from '@/features/diary/components/DiaryRow'
+import {
+  FilterPill,
+  FilterPicker,
+  type PickerType,
+} from '@/features/diary/components/FilterPicker'
 import type { Character } from '@/features/user/types/user.types'
-import type { DiaryListItem, Weather } from '@/features/diary/types/diary.types'
+import type { DiaryListItem } from '@/features/diary/types/diary.types'
 
 const CHARACTER_HERO: Record<
   Character,
@@ -15,236 +18,6 @@ const CHARACTER_HERO: Record<
   DODO: { bg: '#e9f5ff', img: '/images/character-dodo.png', w: 90, h: 200, offsetY: 0 },
   RERE: { bg: '#e9f5ff', img: '/images/character-rere.png', w: 120, h: 230, offsetY: 30 },
   MIMI: { bg: '#e9f5ff', img: '/images/character-mimi.png', w: 120, h: 230, offsetY: 30 },
-}
-
-const WEATHER_LABEL: Record<Weather, string> = {
-  SUNNY: '쨍쨍했어요',
-  CLOUDY: '흐렸어요',
-  RAINY: '비가 왔어요',
-  SNOWY: '눈이 왔어요',
-}
-
-const APP_START_YEAR = 2026
-
-// API 날짜는 "2026.05.09" 또는 "2026-05-09" 혼용 → 파싱 통일
-function parseDateParts(dateStr: string): [number, number, number] {
-  const parts = dateStr.split(/[-.]/)
-  return [Number(parts[0]), Number(parts[1]), Number(parts[2])]
-}
-
-function formatDate(dateStr: string) {
-  const [y, m, day] = parseDateParts(dateStr)
-  return `${y}년 ${m}월 ${day}일`
-}
-
-function ChevronDown({ size = 16 }: { size?: number }) {
-  return (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="none">
-      <path d="M6 9l6 6 6-6" stroke="#424242" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
-  )
-}
-
-type PickerType = 'year' | 'month'
-
-function FilterPill({ label, onClick }: { label: string; onClick: () => void }) {
-  return (
-    <button
-      onClick={onClick}
-      className="inline-flex items-center gap-1 rounded-full border-2 bg-white px-3"
-      style={{ borderColor: 'rgba(145,204,255,0.8)', height: 28 }}
-    >
-      <span
-        className="text-[16px] text-[#424242]"
-        style={{ fontFamily: "'NanumSquareRound', sans-serif", fontWeight: 700 }}
-      >
-        {label}
-      </span>
-      <ChevronDown size={16} />
-    </button>
-  )
-}
-
-function FilterPicker({
-  type,
-  value,
-  selectedYear,
-  onChange,
-  onClose,
-}: {
-  type: PickerType
-  value: number
-  selectedYear: number
-  onChange: (v: number) => void
-  onClose: () => void
-}) {
-  const now = new Date()
-  const currentYear = now.getFullYear()
-  const currentMonth = now.getMonth() + 1
-
-  // 연도: 앱 시작 연도(2026)부터 현재 연도까지
-  const years = Array.from(
-    { length: currentYear - APP_START_YEAR + 1 },
-    (_, i) => APP_START_YEAR + i,
-  )
-
-  // 월: 선택된 연도가 올해면 현재 월까지, 이전 연도면 12월까지
-  const maxMonth = selectedYear >= currentYear ? currentMonth : 12
-  const months = Array.from({ length: maxMonth }, (_, i) => i + 1)
-
-  const items = type === 'year' ? years : months
-
-  // closing 동안 exit 애니메이션 재생 → 패널 slide 끝나면 onClose 호출해 unmount
-  const { closing, requestClose, handleAnimationEnd } = useExitAnimation(onClose)
-
-  // ESC = 닫기
-  useEffect(() => {
-    const onKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') {
-        e.preventDefault()
-        requestClose()
-      }
-    }
-    window.addEventListener('keydown', onKeyDown)
-    return () => window.removeEventListener('keydown', onKeyDown)
-  }, [requestClose])
-
-  return (
-    // absolute → MobileLayout의 relative 컨테이너(390px) 기준으로 배치
-    <div
-      className={`absolute inset-0 z-50 flex items-end ${closing ? 'animate-fade-out' : 'animate-fade-in'}`}
-      style={{ backgroundColor: 'rgba(0,0,0,0.35)' }}
-      onClick={requestClose}
-    >
-      <div
-        className={`w-full bg-white rounded-t-[24px] overflow-hidden ${closing ? 'animate-slide-down-modal' : 'animate-slide-up-modal'}`}
-        onClick={(e) => e.stopPropagation()}
-        onAnimationEnd={handleAnimationEnd}
-      >
-        {/* 핸들 바 */}
-        <div className="flex justify-center pt-3 pb-1">
-          <div style={{ width: 48, height: 4, borderRadius: 100, backgroundColor: '#d0d0d0' }} />
-        </div>
-        <p
-          className="text-center py-3 text-[16px] text-[#424242]"
-          style={{ fontFamily: "'NanumSquareRound', sans-serif", fontWeight: 700 }}
-        >
-          {type === 'year' ? '연도 선택' : '월 선택'}
-        </p>
-        <div className="overflow-y-auto" style={{ maxHeight: '40vh', paddingBottom: 32 }}>
-          {items.map((item) => (
-            <button
-              key={item}
-              onClick={() => {
-                onChange(item)
-                requestClose()
-              }}
-              className="w-full py-[14px] text-center transition-colors duration-150 ease-out hover:bg-black/5 active:bg-black/10"
-              style={{
-                fontFamily: "'NanumSquareRound', sans-serif",
-                fontSize: 18,
-                fontWeight: value === item ? 800 : 400,
-                color: value === item ? '#91ccff' : '#424242',
-              }}
-            >
-              {type === 'month' ? `${item}월` : String(item)}
-            </button>
-          ))}
-        </div>
-      </div>
-    </div>
-  )
-}
-
-function DiaryRow({ item, onClick }: { item: DiaryListItem; onClick: () => void }) {
-  return (
-    <button
-      onClick={onClick}
-      className="group relative z-0 flex w-full items-start gap-4 text-left"
-    >
-      {/* hover 배경 — 레이아웃 영향 없이 가로로 넓게 띄우려고 absolute 레이어로 분리. -z-10 으로 콘텐츠 뒤에 깔림 */}
-      <span
-        aria-hidden
-        className="pointer-events-none absolute -inset-x-5 -inset-y-2 -z-10 rounded-[12px] transition-colors duration-150 ease-out group-hover:bg-black/5 group-active:bg-black/10"
-      />
-      <div
-        className="shrink-0 rounded-[10px] overflow-hidden"
-        style={{ width: 128, height: 128, backgroundColor: '#e8e8e8' }}
-      >
-        {item.imageUrl && (
-          <img src={item.imageUrl} alt="" className="w-full h-full object-cover" />
-        )}
-      </div>
-      <div className="flex flex-col pt-3 gap-[10px]">
-        <p
-          className="text-[18px] text-[#424242]"
-          style={{ fontFamily: "'NanumSquareRound', sans-serif", fontWeight: 700 }}
-        >
-          {formatDate(item.date)}
-        </p>
-        <div className="flex items-center gap-3">
-          <WeatherIcon weather={item.weather} size={32} />
-          <p
-            className="text-[14px] text-[#424242]"
-            style={{ fontFamily: "'NanumSquareRound', sans-serif", fontWeight: 700 }}
-          >
-            {WEATHER_LABEL[item.weather]}
-          </p>
-        </div>
-        {item.introLines && (
-          <div className="flex items-center gap-3">
-            <MoodIcon mood={item.mood} size={32} />
-            <p
-              className="text-[14px] text-[#424242]"
-              style={{ fontFamily: "'NanumSquareRound', sans-serif", fontWeight: 700 }}
-            >
-              {item.introLines}
-            </p>
-          </div>
-        )}
-      </div>
-    </button>
-  )
-}
-
-// PENDING(생성 중) 일기는 썸네일 없이 '생성중' 표시. 클릭하면 폴링 화면으로 이동
-function PendingDiaryRow({ item, onClick }: { item: DiaryListItem; onClick: () => void }) {
-  return (
-    <button
-      onClick={onClick}
-      className="group relative z-0 flex w-full items-start gap-4 text-left"
-    >
-      <span
-        aria-hidden
-        className="pointer-events-none absolute -inset-x-5 -inset-y-2 -z-10 rounded-[12px] transition-colors duration-150 ease-out group-hover:bg-black/5 group-active:bg-black/10"
-      />
-      <div
-        className="shrink-0 rounded-[10px] flex items-center justify-center"
-        style={{ width: 128, height: 128, backgroundColor: '#e8e8e8' }}
-      >
-        <span
-          className="text-[13px] text-[#7a7a7a]"
-          style={{ fontFamily: "'NanumSquareRound', sans-serif", fontWeight: 700 }}
-        >
-          생성중...
-        </span>
-      </div>
-      <div className="flex flex-col pt-3 gap-[10px]">
-        <p
-          className="text-[18px] text-[#424242]"
-          style={{ fontFamily: "'NanumSquareRound', sans-serif", fontWeight: 700 }}
-        >
-          {formatDate(item.date)}
-        </p>
-        <p
-          className="text-[14px] text-[#959595]"
-          style={{ fontFamily: "'NanumSquareRound', sans-serif", fontWeight: 700 }}
-        >
-          노래를 만들고 있어요...
-        </p>
-      </div>
-    </button>
-  )
 }
 
 export default function DiaryListPage() {
@@ -346,11 +119,10 @@ export default function DiaryListPage() {
                 />
                 {/* 말풍선 본체(SVG의 y=0~63 영역, 렌더링 시 약 74px)에 텍스트 중앙 배치 */}
                 <div
-                  className="absolute left-0 right-0 flex flex-col items-center justify-center text-center"
+                  className="font-katuri absolute left-0 right-0 flex flex-col items-center justify-center text-center"
                   style={{
                     top: 0,
                     height: 74,
-                    fontFamily: "'AndongKaturi', sans-serif",
                     fontSize: 16,
                     color: '#444',
                     lineHeight: 1.35,
@@ -416,8 +188,8 @@ export default function DiaryListPage() {
           <img src="/images/banner-bg.svg" alt="" className="absolute inset-0 w-full h-full object-cover" />
           <div className="absolute inset-0 flex items-center px-4 gap-2">
             <div
-              className="flex-1 text-left text-[17px] text-[#424242]"
-              style={{ fontFamily: "'AndongKaturi', sans-serif", lineHeight: 1.3 }}
+              className="font-katuri flex-1 text-left text-[17px] text-[#424242]"
+              style={{ lineHeight: 1.3 }}
             >
               <p>다른 친구들</p>
               <p>노래도 들어볼까?</p>

@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useUser } from '@/features/user/hooks/useUser'
 import { useDiaries } from '@/features/diary/hooks/useDiaries'
+import { useExitAnimation } from '@/shared/hooks/useExitAnimation'
 import WeatherIcon from '@/features/diary/components/WeatherIcon'
 import MoodIcon from '@/features/diary/components/MoodIcon'
 import type { Character } from '@/features/user/types/user.types'
@@ -94,15 +95,7 @@ function FilterPicker({
   const items = type === 'year' ? years : months
 
   // closing 동안 exit 애니메이션 재생 → 패널 slide 끝나면 onClose 호출해 unmount
-  const [closing, setClosing] = useState(false)
-
-  function requestClose() {
-    if (!closing) setClosing(true)
-  }
-
-  function handlePanelAnimationEnd() {
-    if (closing) onClose()
-  }
+  const { closing, requestClose, handleAnimationEnd } = useExitAnimation(onClose)
 
   // ESC = 닫기
   useEffect(() => {
@@ -114,8 +107,7 @@ function FilterPicker({
     }
     window.addEventListener('keydown', onKeyDown)
     return () => window.removeEventListener('keydown', onKeyDown)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [requestClose])
 
   return (
     // absolute → MobileLayout의 relative 컨테이너(390px) 기준으로 배치
@@ -127,7 +119,7 @@ function FilterPicker({
       <div
         className={`w-full bg-white rounded-t-[24px] overflow-hidden ${closing ? 'animate-slide-down-modal' : 'animate-slide-up-modal'}`}
         onClick={(e) => e.stopPropagation()}
-        onAnimationEnd={handlePanelAnimationEnd}
+        onAnimationEnd={handleAnimationEnd}
       >
         {/* 핸들 바 */}
         <div className="flex justify-center pt-3 pb-1">

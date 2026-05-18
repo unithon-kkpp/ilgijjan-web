@@ -4,6 +4,7 @@ import type { Diary } from '../types/diary.types'
 import { useTogglePublish } from '../hooks/useTogglePublish'
 import { useDeleteDiary } from '../hooks/useDeleteDiary'
 import { useLike } from '@/features/like/hooks/useLike'
+import { useExitAnimation } from '@/shared/hooks/useExitAnimation'
 import BackButton from '@/shared/components/ui/BackButton'
 import WeatherIcon from './WeatherIcon'
 import MoodIcon from './MoodIcon'
@@ -490,17 +491,7 @@ function DeleteConfirmModal({
 
 function OriginalContentModal({ diary, onClose }: { diary: Diary; onClose: () => void }) {
   // closing 동안 exit 애니메이션 → 끝나면 onAnimationEnd 로 부모에 unmount 요청(onClose)
-  const [closing, setClosing] = useState(false)
-
-  function requestClose() {
-    if (!closing) setClosing(true)
-  }
-
-  // panel 의 slide 애니메이션 완료 시점을 unmount 트리거로 사용
-  // 입장 애니메이션이 끝났을 때도 한 번 fire 되지만 closing=false 라 무시됨
-  function handlePanelAnimationEnd() {
-    if (closing) onClose()
-  }
+  const { closing, requestClose, handleAnimationEnd } = useExitAnimation(onClose)
 
   // ESC = 닫기
   useEffect(() => {
@@ -512,8 +503,7 @@ function OriginalContentModal({ diary, onClose }: { diary: Diary; onClose: () =>
     }
     window.addEventListener('keydown', onKeyDown)
     return () => window.removeEventListener('keydown', onKeyDown)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [requestClose])
 
   return (
     <div
@@ -525,7 +515,7 @@ function OriginalContentModal({ diary, onClose }: { diary: Diary; onClose: () =>
         className={`w-full bg-white rounded-t-[28px] overflow-hidden ${closing ? 'animate-slide-down-modal' : 'animate-slide-up-modal'}`}
         style={{ height: '70%' }}
         onClick={(e) => e.stopPropagation()}
-        onAnimationEnd={handlePanelAnimationEnd}
+        onAnimationEnd={handleAnimationEnd}
       >
         <div className="flex flex-col items-center pt-8 px-6 h-full overflow-y-auto pb-10">
           <p

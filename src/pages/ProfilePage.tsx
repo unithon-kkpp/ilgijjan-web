@@ -4,6 +4,7 @@ import { useUser } from '@/features/user/hooks/useUser'
 import { useAuth } from '@/features/auth/hooks/useAuth'
 import { useToast } from '@/shared/hooks/useToast'
 import ConfirmDialog from '@/shared/components/ui/ConfirmDialog'
+import BackButton from '@/shared/components/ui/BackButton'
 import type { Character } from '@/features/user/types/user.types'
 
 const INSTAGRAM_URL = 'https://www.instagram.com/diary.jjan'
@@ -13,20 +14,6 @@ const CHARACTER_THEME: Record<Character, { panelBg: string; img: string; scale: 
   DODO: { panelBg: '#e4f0f8', img: '/images/character-dodo.png', scale: 1 },
   RERE: { panelBg: '#e6f5e2', img: '/images/character-rere.png', scale: 0.8 },
   MIMI: { panelBg: '#f1e5f7', img: '/images/character-mimi.png', scale: 0.8 },
-}
-
-function ChevronLeftIcon() {
-  return (
-    <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
-      <path
-        d="M15 6l-6 6 6 6"
-        stroke="#424242"
-        strokeWidth="1.8"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
-  )
 }
 
 function PencilIcon({ size }: { size: number }) {
@@ -66,13 +53,11 @@ export default function ProfilePage() {
     <div className="w-full flex flex-1 flex-col bg-white relative">
       {/* Header */}
       <header className="h-14 shrink-0 flex items-center px-4">
-        <button
-          onClick={() => navigate(-1)}
-          aria-label="뒤로가기"
+        <BackButton
+          size={28}
+          strokeWidth={1.8}
           className="w-10 h-10 flex items-center justify-center rounded-full transition-colors hover:bg-black/5 active:bg-black/10"
-        >
-          <ChevronLeftIcon />
-        </button>
+        />
       </header>
 
       {/* Avatar */}

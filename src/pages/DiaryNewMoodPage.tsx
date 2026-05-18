@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAtom } from 'jotai'
-import axios from 'axios'
 import { diaryDraftAtom } from '@/app/store'
 import StepProgress from '@/features/diary/components/StepProgress'
 import MoodIcon from '@/features/diary/components/MoodIcon'
 import { useCreateDiary } from '@/features/diary/hooks/useCreateDiary'
+import { getApiErrorCode } from '@/shared/lib/apiError'
 import type { CreateDiaryRequest, Mood } from '@/features/diary/types/diary.types'
 
 // 9개의 기분 (값 1~9). Figma 디자인의 3x3 그리드 순서대로 매핑.
@@ -66,9 +66,7 @@ export default function DiaryNewMoodPage() {
       navigate(`/diary/new/loading/${diaryId}`, { replace: true })
     } catch (e) {
       // 음표 부족(이미 오늘 일기 생성함) 케이스만 별도 안내, 나머지는 일반 에러
-      const errorCode =
-        axios.isAxiosError(e) ? (e.response?.data as { code?: string } | undefined)?.code : undefined
-      if (errorCode === 'INSUFFICIENT_NOTES') {
+      if (getApiErrorCode(e) === 'INSUFFICIENT_NOTES') {
         setToastMessage('오늘은 이미 일기를 만들었어요.\n내일 다시 와주세요!')
       } else {
         console.error('일기 생성 요청 실패:', e)

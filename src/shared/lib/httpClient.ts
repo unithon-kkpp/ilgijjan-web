@@ -67,11 +67,16 @@ function forceLogin() {
 // - 재발급 실패 / refresh token 도 만료 → 토큰 정리 + /login
 httpClient.interceptors.response.use(
   (response) => {
-    console.log(`[API] ${response.config.method?.toUpperCase()} ${response.config.url}`, response.data)
+    // dev 빌드에서만 응답 로그 — production 콘솔에 토큰/유저 데이터가 새지 않도록
+    if (import.meta.env.DEV) {
+      console.log(`[API] ${response.config.method?.toUpperCase()} ${response.config.url}`, response.data)
+    }
     return response
   },
   async (error: AxiosError<{ code?: string }>) => {
-    console.error(`[API Error] ${error.config?.method?.toUpperCase()} ${error.config?.url}`, error.response?.data ?? error.message)
+    if (import.meta.env.DEV) {
+      console.error(`[API Error] ${error.config?.method?.toUpperCase()} ${error.config?.url}`, error.response?.data ?? error.message)
+    }
 
     if (error.response?.status !== 401) {
       return Promise.reject(error)

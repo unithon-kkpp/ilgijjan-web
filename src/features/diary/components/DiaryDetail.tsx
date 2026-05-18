@@ -4,6 +4,7 @@ import type { Diary } from '../types/diary.types'
 import { useTogglePublish } from '../hooks/useTogglePublish'
 import { useDeleteDiary } from '../hooks/useDeleteDiary'
 import { useLike } from '@/features/like/hooks/useLike'
+import BackButton from '@/shared/components/ui/BackButton'
 import WeatherIcon from './WeatherIcon'
 import MoodIcon from './MoodIcon'
 
@@ -25,20 +26,6 @@ const HEART_GRAY = '#9DA890'
 function parseDate(dateStr: string) {
   const [y, m, d] = dateStr.split(/[-.]/).map(Number)
   return `${y}년 ${m}월 ${d}일`
-}
-
-function ChevronLeft({ size = 32 }: { size?: number }) {
-  return (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="none">
-      <path
-        d="M15 18l-6-6 6-6"
-        stroke={TEXT_BLACK}
-        strokeWidth="2.5"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
-  )
 }
 
 function TrashIcon({ size = 26 }: { size?: number }) {
@@ -628,13 +615,7 @@ export default function DiaryDetail({ diary, fromCreate = false }: DiaryDetailPr
     >
       {/* 헤더 — 뒤로가기 + 휴지통 */}
       <div className="shrink-0 flex items-center justify-between px-5 pt-5 pb-2">
-        <button
-          className="rounded-full p-2 -m-2 transition-all duration-150 ease-out hover:bg-black/5 active:bg-black/10"
-          onClick={handleBack}
-          aria-label="뒤로가기"
-        >
-          <ChevronLeft size={32} />
-        </button>
+        <BackButton onClick={handleBack} />
         {diary.isOwner ? (
           <button
             className="rounded-full p-2 -m-2 transition-all duration-150 ease-out hover:bg-black/5 active:bg-black/10"

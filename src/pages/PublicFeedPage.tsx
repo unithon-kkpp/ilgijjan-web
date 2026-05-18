@@ -2,6 +2,7 @@ import { useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useUser } from '@/features/user/hooks/useUser'
 import { usePublicDiaries } from '@/features/diary/hooks/usePublicDiaries'
+import BackButton from '@/shared/components/ui/BackButton'
 import type { Character } from '@/features/user/types/user.types'
 import type { PublicDiaryItem } from '@/features/diary/types/diary.types'
 
@@ -14,20 +15,6 @@ const CHARACTER_PORTRAIT: Record<
   DODO: { src: '/images/feed-character-dodo.png', w: 100, h: 210, top: -10, left: 36 },
   RERE: { src: '/images/feed-character-rere.png', w: 118, h: 138, top: 56, left: 22 },
   MIMI: { src: '/images/feed-character-mimi.png', w: 145, h: 120, top: 66, left: 14 },
-}
-
-function BackChevron() {
-  return (
-    <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
-      <path
-        d="M15 18l-6-6 6-6"
-        stroke="#424242"
-        strokeWidth="2.5"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
-  )
 }
 
 function SpeechBubble() {
@@ -161,13 +148,7 @@ export default function PublicFeedPage() {
     >
       {/* 상단 뒤로가기 */}
       <div className="shrink-0 flex items-center px-[20px] pt-[18px] pb-[6px] relative z-10">
-        <button
-          onClick={() => navigate(-1)}
-          className="rounded-full p-2 -m-2 transition-all duration-150 ease-out hover:bg-black/5 active:bg-black/10"
-          aria-label="뒤로가기"
-        >
-          <BackChevron />
-        </button>
+        <BackButton size={28} />
       </div>
 
       {/* 히어로 — 캐릭터 + 말풍선. relative + overflow-visible 로

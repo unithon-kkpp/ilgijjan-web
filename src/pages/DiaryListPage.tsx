@@ -268,10 +268,13 @@ export default function DiaryListPage() {
   const { data: user, isLoading: userLoading } = useUser()
   const { data: diaryData } = useDiaries(year, month)
 
-  if (!userLoading && user && !user.name) {
-    navigate('/onboarding/name', { replace: true })
-    return null
-  }
+  // 이름 미설정 유저는 온보딩으로 강제 이동. 렌더 함수 본문에서 navigate 호출하면
+  // React 가 "render 중 부수효과" 경고를 내므로 useEffect 안에서 실행.
+  const needsOnboarding = !userLoading && user !== undefined && !user.name
+  useEffect(() => {
+    if (needsOnboarding) navigate('/onboarding/name', { replace: true })
+  }, [needsOnboarding, navigate])
+  if (needsOnboarding) return null
 
   // FAILED / DELETED 는 목록에서 숨김. COMPLETED는 정상 표시, PENDING은 '생성중' 카드로 표시
   const diaries: DiaryListItem[] = (diaryData?.diaryList ?? []).filter(

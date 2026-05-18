@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { useQueryClient } from '@tanstack/react-query'
 import { userApi } from '@/features/user/api/userApi'
+import { getApiErrorStatus } from '@/shared/lib/apiError'
 
 export default function OnboardingNamePage() {
   const navigate = useNavigate()
@@ -20,9 +21,9 @@ export default function OnboardingNamePage() {
       await userApi.updateName({ name: name.trim() })
       queryClient.invalidateQueries({ queryKey: ['user', 'me'] })
       navigate(returnTo ?? '/onboarding/friends', { replace: true })
-    } catch (e: any) {
-      const status = e?.response?.status
-      if (status === 409) {
+    } catch (e) {
+      // 409 = 이름 중복. 그 외는 일반 에러 메시지.
+      if (getApiErrorStatus(e) === 409) {
         setError('이 이름은 이미 사용 중이에요.\n다른 이름으로 해볼까요?')
       } else {
         setError('오류가 발생했어요. 다시 시도해주세요!')

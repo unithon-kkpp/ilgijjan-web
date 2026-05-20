@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { useQueryClient } from '@tanstack/react-query'
 import { userApi } from '@/features/user/api/userApi'
+import type { User } from '@/features/user/types/user.types'
 import { getApiErrorStatus } from '@/shared/lib/apiError'
 
 // 한글 2점, 영문 1점 가중치로 합산. 최대 10점까지 허용. (숫자/기호/공백은 입력 단계에서 차단)
@@ -44,8 +45,11 @@ export default function OnboardingNamePage() {
     setLoading(true)
     setError('')
     try {
-      await userApi.updateName({ name: name.trim() })
-      queryClient.invalidateQueries({ queryKey: ['user', 'me'] })
+      const trimmed = name.trim()
+      await userApi.updateName({ name: trimmed })
+      queryClient.setQueryData<User>(['user', 'me'], (old) =>
+        old ? { ...old, name: trimmed } : old,
+      )
       navigate(returnTo ?? '/onboarding/friends', { replace: true })
     } catch (e) {
       // 409 = 이름 중복. 그 외는 일반 에러 메시지.

@@ -116,8 +116,15 @@ export default function DiaryDetail({ diary, fromCreate = false }: DiaryDetailPr
       {/* 카드 영역 — z-10으로 잔디 위에 떠 있음. 가사 ↔ 이미지 flip 애니메이션 */}
       <div className="relative shrink-0 px-5 z-10">
         <div
-          className="w-full relative"
-          style={{ aspectRatio: '1 / 1', perspective: '1200px' }}
+          className="w-full relative group"
+          style={{
+            aspectRatio: '1 / 1',
+            perspective: '1200px',
+            cursor: canToggleCard ? 'pointer' : 'default',
+          }}
+          onClick={
+            canToggleCard ? () => setShowLyrics(!showLyrics) : undefined
+          }
         >
           {/* 회전 컨테이너 — showLyrics 에 따라 Y축 0deg ↔ 180deg */}
           <div
@@ -185,12 +192,16 @@ export default function DiaryDetail({ diary, fromCreate = false }: DiaryDetailPr
             </div>
           </div>
 
-          {/* 토글 버튼 — flip 컨테이너 밖이라 회전 영향 안 받음 */}
+          {/* 토글 버튼 — 부모(group) 호버/액티브와 연동돼서 박스 어디를 만져도 같이 강조됨 */}
           {canToggleCard && (
             <button
-              className="absolute z-10 flex items-center justify-center rounded-full transition-all duration-150 ease-out hover:bg-white/60 active:bg-white/80"
+              className="absolute z-10 flex items-center justify-center rounded-full transition-all duration-150 ease-out group-hover:bg-white/60 group-active:bg-white/80"
               style={{ left: 10, bottom: 8, width: 38, height: 34 }}
-              onClick={() => setShowLyrics(!showLyrics)}
+              onClick={(e) => {
+                // 부모 박스에도 onClick이 걸려있어서 막지 않으면 토글이 두 번 일어남
+                e.stopPropagation()
+                setShowLyrics(!showLyrics)
+              }}
               aria-label={showLyrics ? '그림 보기' : '가사 보기'}
             >
               {showLyrics ? <ImageToggleIcon /> : <LineToggleIcon />}

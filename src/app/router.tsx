@@ -16,6 +16,7 @@ import DiaryNewMoodPage from '@/pages/DiaryNewMoodPage'
 import DiaryNewWritePage from '@/pages/DiaryNewWritePage'
 import DiaryNewLoadingPage from '@/pages/DiaryNewLoadingPage'
 import ProfilePage from '@/pages/ProfilePage'
+import NotFoundPage from '@/pages/NotFoundPage'
 
 function PrivateRoute() {
   if (!tokenStorage.get()) return <Navigate to="/login" replace />
@@ -48,6 +49,10 @@ export const router = createBrowserRouter([
           { path: '/profile', element: <ProfilePage /> },
         ],
       },
+
+      // 위 어떤 경로에도 안 맞는 모든 URL → 404. PrivateRoute 밖에 두어야
+      // 로그인 안 한 유저가 오타 URL 로 와도 로그인으로 튕기지 않고 404 를 본다.
+      { path: '*', element: <NotFoundPage /> },
     ],
   },
 ])

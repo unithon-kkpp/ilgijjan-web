@@ -12,9 +12,9 @@ const CHARACTER_PORTRAIT: Record<
   Character,
   { src: string; w: number; h: number; top: number; left: number }
 > = {
-  DODO: { src: '/images/feed-character-dodo.png', w: 100, h: 210, top: -10, left: 36 },
-  RERE: { src: '/images/feed-character-rere.png', w: 118, h: 138, top: 56, left: 22 },
-  MIMI: { src: '/images/feed-character-mimi.png', w: 145, h: 120, top: 66, left: 14 },
+  DODO: { src: '/images/feed-character-dodo.webp', w: 100, h: 210, top: -10, left: 36 },
+  RERE: { src: '/images/feed-character-rere.webp', w: 118, h: 138, top: 56, left: 22 },
+  MIMI: { src: '/images/feed-character-mimi.webp', w: 145, h: 120, top: 66, left: 14 },
 }
 
 function SpeechBubble() {
@@ -26,7 +26,7 @@ function SpeechBubble() {
       style={{ filter: 'drop-shadow(0px 0px 4px rgba(0,0,0,0.15))' }}
     >
       <img
-        src="/images/feed-bubble.png"
+        src="/images/feed-bubble.webp"
         alt=""
         className="absolute inset-0 w-full h-full object-contain"
       />

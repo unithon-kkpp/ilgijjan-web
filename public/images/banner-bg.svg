@@ -1,7 +1,1 @@
-<svg preserveAspectRatio="none" width="100%" height="100%" overflow="visible" style="display: block;" viewBox="0 0 344 63" fill="none" xmlns="http://www.w3.org/2000/svg">
-<g id="Group 29">
-<rect id="Rectangle 61" width="344" height="63" rx="10" fill="var(--fill-0, #D5FFCD)"/>
-<ellipse id="Ellipse 31" cx="138.5" cy="24.5" rx="15.5" ry="13.5" fill="var(--fill-0, #FFD899)"/>
-<path id="Intersect" d="M171.857 25.412C200.833 22.6948 241.8 10.4674 270.775 14.996C299.751 20.4304 312.241 22.9187 329.727 30.8466C347.106 38.7266 343.756 39.8895 343.715 39.9032V55.371C342.65 59.749 338.706 62.9999 334 62.9999H10C4.47718 62.9999 4.24495e-05 58.5227 0 52.9999V39.9032C0.00530547 39.8783 0.435478 38.1294 18.1377 30.8466C35.9697 23.5105 56.9528 22.242 85.9287 18.6191C114.905 15.9019 142.882 28.1292 171.857 25.412Z" fill="var(--fill-0, #7BE17B)"/>
-</g>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" fill="none" overflow="visible" preserveAspectRatio="none" style="display:block" viewBox="0 0 344 63"><rect width="344" height="63" fill="var(--fill-0, #d5ffcd)" rx="10"/><ellipse cx="138.5" cy="24.5" fill="var(--fill-0, #ffd899)" rx="15.5" ry="13.5"/><path fill="var(--fill-0, #7be17b)" d="M171.857 25.412c28.976-2.717 69.943-14.945 98.918-10.416 28.976 5.434 41.466 7.923 58.952 15.85 17.379 7.88 14.029 9.043 13.988 9.057v15.468C342.65 59.749 338.706 63 334 63H10C4.477 63 0 58.523 0 53V39.903c.005-.025.435-1.774 18.138-9.056 17.832-7.337 38.815-8.605 67.79-12.228 28.977-2.717 56.954 9.51 85.929 6.793"/></svg>

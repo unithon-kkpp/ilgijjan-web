@@ -8,7 +8,7 @@ import type { Character } from '@/features/user/types/user.types'
 function DodoCharacter() {
   return (
     <img
-      src="/images/character-dodo.png"
+      src="/images/character-dodo.webp"
       alt="dodo"
       className="absolute object-contain"
       style={{ top: -15, left: 44, width: 100, height: 'auto' }}
@@ -19,7 +19,7 @@ function DodoCharacter() {
 function RereCharacter() {
   return (
     <img
-      src="/images/character-rere.png"
+      src="/images/character-rere.webp"
       alt="rere"
       className="absolute object-contain"
       style={{ top: 30, left: 44, width: 150, height: 'auto' }}
@@ -30,7 +30,7 @@ function RereCharacter() {
 function MimiCharacter() {
   return (
     <img
-      src="/images/character-mimi.png"
+      src="/images/character-mimi.webp"
       alt="mimi"
       className="absolute object-contain"
       style={{ top: 10, left: 44, width: 140, height: 'auto' }}

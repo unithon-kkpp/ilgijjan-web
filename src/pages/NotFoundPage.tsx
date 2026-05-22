@@ -11,7 +11,7 @@ export default function NotFoundPage() {
   return (
     <div className="w-full flex flex-1 flex-col items-center justify-center gap-6 px-6 bg-jjan-bg">
       <img
-        src="/images/banner-worm.png"
+        src="/images/banner-worm.webp"
         alt=""
         style={{ width: 90, height: 122, objectFit: 'contain', transform: 'rotate(-6deg)' }}
       />

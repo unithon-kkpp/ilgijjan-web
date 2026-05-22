@@ -12,9 +12,9 @@ const CHARACTER_LOADING: Record<
   Character,
   { img: string; w: number; h: number; top: number; left: number }
 > = {
-  DODO: { img: '/images/character-dodo.png', w: 135, h: 360, top: 286, left: 15 },
-  RERE: { img: '/images/character-rere.png', w: 168, h: 218, top: 357, left: 15 },
-  MIMI: { img: '/images/character-mimi.png', w: 212, h: 176, top: 360, left: 15 },
+  DODO: { img: '/images/character-dodo.webp', w: 135, h: 360, top: 286, left: 15 },
+  RERE: { img: '/images/character-rere.webp', w: 168, h: 218, top: 357, left: 15 },
+  MIMI: { img: '/images/character-mimi.webp', w: 212, h: 176, top: 360, left: 15 },
 }
 
 const ERROR_REDIRECT_DELAY_MS = 5000
@@ -120,7 +120,7 @@ export default function DiaryNewLoadingPage() {
         style={{ left: 144, top: 250, width: 231, height: 136 }}
       >
         <img
-          src="/images/speech-bubble-side.png"
+          src="/images/speech-bubble-side.webp"
           alt=""
           className="absolute inset-0 w-full h-full"
           style={{ filter: 'drop-shadow(0px 0px 6px rgba(0,0,0,0.1))' }}

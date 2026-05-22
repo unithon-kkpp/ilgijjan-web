@@ -15,9 +15,9 @@ const CHARACTER_HERO: Record<
   Character,
   { bg: string; img: string; w: number; h: number; offsetY: number }
 > = {
-  DODO: { bg: '#e9f5ff', img: '/images/character-dodo.png', w: 90, h: 200, offsetY: 0 },
-  RERE: { bg: '#e9f5ff', img: '/images/character-rere.png', w: 120, h: 230, offsetY: 30 },
-  MIMI: { bg: '#e9f5ff', img: '/images/character-mimi.png', w: 120, h: 230, offsetY: 30 },
+  DODO: { bg: '#e9f5ff', img: '/images/character-dodo.webp', w: 90, h: 200, offsetY: 0 },
+  RERE: { bg: '#e9f5ff', img: '/images/character-rere.webp', w: 120, h: 230, offsetY: 30 },
+  MIMI: { bg: '#e9f5ff', img: '/images/character-mimi.webp', w: 120, h: 230, offsetY: 30 },
 }
 
 export default function DiaryListPage() {
@@ -195,7 +195,7 @@ export default function DiaryListPage() {
               <p>노래도 들어볼까?</p>
             </div>
             <img
-              src="/images/banner-worm.png"
+              src="/images/banner-worm.webp"
               alt=""
               style={{ width: 44, height: 60, objectFit: 'contain', transform: 'rotate(4.75deg)' }}
             />

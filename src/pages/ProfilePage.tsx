@@ -11,9 +11,9 @@ const INSTAGRAM_URL = 'https://www.instagram.com/diary.jjan'
 const KAKAO_CHANNEL_URL = 'https://pf.kakao.com/_FPrsX/chat'
 
 const CHARACTER_THEME: Record<Character, { panelBg: string; img: string; scale: number }> = {
-  DODO: { panelBg: '#e4f0f8', img: '/images/character-dodo.png', scale: 1 },
-  RERE: { panelBg: '#e6f5e2', img: '/images/character-rere.png', scale: 0.8 },
-  MIMI: { panelBg: '#f1e5f7', img: '/images/character-mimi.png', scale: 0.8 },
+  DODO: { panelBg: '#e4f0f8', img: '/images/character-dodo.webp', scale: 1 },
+  RERE: { panelBg: '#e6f5e2', img: '/images/character-rere.webp', scale: 0.8 },
+  MIMI: { panelBg: '#f1e5f7', img: '/images/character-mimi.webp', scale: 0.8 },
 }
 
 function PencilIcon({ size }: { size: number }) {

@@ -1,9 +1,1 @@
-<svg preserveAspectRatio="none" width="100%" height="100%" overflow="visible" style="display: block;" viewBox="0 0 23 23" fill="none" xmlns="http://www.w3.org/2000/svg">
-<circle id="Ellipse 33" cx="11.5" cy="11.5" r="11.5" fill="url(#paint0_radial_1007_1498)"/>
-<defs>
-<radialGradient id="paint0_radial_1007_1498" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(11.5 11.5) rotate(90) scale(11.5)">
-<stop stop-color="#FF6F6F" stop-opacity="0.2"/>
-<stop offset="1" stop-color="#FDF8B8" stop-opacity="0.1"/>
-</radialGradient>
-</defs>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" fill="none" overflow="visible" preserveAspectRatio="none" style="display:block" viewBox="0 0 23 23"><circle cx="11.5" cy="11.5" r="11.5" fill="url(#a)"/><defs><radialGradient id="a" cx="0" cy="0" r="1" gradientTransform="rotate(90 0 11.5)scale(11.5)" gradientUnits="userSpaceOnUse"><stop stop-color="#ff6f6f" stop-opacity=".2"/><stop offset="1" stop-color="#fdf8b8" stop-opacity=".1"/></radialGradient></defs></svg>

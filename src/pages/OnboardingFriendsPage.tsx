@@ -32,7 +32,7 @@ const CHARACTERS: {
     label: '최고의 작곡가 로우',
     color: '#0f7635',
     cardBg: '/images/card-bg-rere.svg',
-    characterImg: '/images/character-rere.png',
+    characterImg: '/images/character-rere.webp',
     slotHeight: 158,
     cardOffset: 27,   // 268 - 241
     cardLeft: 52,
@@ -47,7 +47,7 @@ const CHARACTERS: {
     label: '섬세한 뮤지션 하이',
     color: '#057fdd',
     cardBg: '/images/card-bg-dodo.svg',
-    characterImg: '/images/character-dodo.png',
+    characterImg: '/images/character-dodo.webp',
     slotHeight: 211,
     cardOffset: 54,   // 418 - 364
     cardLeft: 95,
@@ -62,7 +62,7 @@ const CHARACTERS: {
     label: '자유로운 영혼 퍼프',
     color: '#883aca',
     cardBg: '/images/card-bg-mimi.svg',
-    characterImg: '/images/character-mimi.png',
+    characterImg: '/images/character-mimi.webp',
     slotHeight: 136,
     cardOffset: 11,   // 569 - 558
     cardLeft: 52,

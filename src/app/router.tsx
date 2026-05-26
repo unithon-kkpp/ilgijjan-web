@@ -1,22 +1,27 @@
+import { lazy } from 'react'
 import { createBrowserRouter, Navigate, Outlet } from 'react-router-dom'
 import { tokenStorage } from '@/shared/lib/tokenStorage'
 
+// 레이아웃과 첫 진입 화면(로그인)은 즉시 로드.
 import MobileLayout from '@/shared/components/layout/MobileLayout'
 import LoginPage from '@/pages/LoginPage'
-import KakaoCallbackPage from '@/pages/KakaoCallbackPage'
-import OnboardingNamePage from '@/pages/OnboardingNamePage'
-import OnboardingFriendsPage from '@/pages/OnboardingFriendsPage'
-import DiaryListPage from '@/pages/DiaryListPage'
-import PublicFeedPage from '@/pages/PublicFeedPage'
-import DiaryDetailPage from '@/pages/DiaryDetailPage'
-import DiaryNewEntryPage from '@/pages/DiaryNewEntryPage'
-import DiaryNewPhotoPage from '@/pages/DiaryNewPhotoPage'
-import DiaryNewWeatherPage from '@/pages/DiaryNewWeatherPage'
-import DiaryNewMoodPage from '@/pages/DiaryNewMoodPage'
-import DiaryNewWritePage from '@/pages/DiaryNewWritePage'
-import DiaryNewLoadingPage from '@/pages/DiaryNewLoadingPage'
-import ProfilePage from '@/pages/ProfilePage'
-import NotFoundPage from '@/pages/NotFoundPage'
+
+// 나머지 페이지는 해당 경로에 들어갈 때 각자 별도 파일로 불러옴(코드 스플리팅).
+// 로딩되는 짧은 순간은 MobileLayout 의 Suspense 스피너가 가린다.
+const KakaoCallbackPage = lazy(() => import('@/pages/KakaoCallbackPage'))
+const OnboardingNamePage = lazy(() => import('@/pages/OnboardingNamePage'))
+const OnboardingFriendsPage = lazy(() => import('@/pages/OnboardingFriendsPage'))
+const DiaryListPage = lazy(() => import('@/pages/DiaryListPage'))
+const PublicFeedPage = lazy(() => import('@/pages/PublicFeedPage'))
+const DiaryDetailPage = lazy(() => import('@/pages/DiaryDetailPage'))
+const DiaryNewEntryPage = lazy(() => import('@/pages/DiaryNewEntryPage'))
+const DiaryNewPhotoPage = lazy(() => import('@/pages/DiaryNewPhotoPage'))
+const DiaryNewWeatherPage = lazy(() => import('@/pages/DiaryNewWeatherPage'))
+const DiaryNewMoodPage = lazy(() => import('@/pages/DiaryNewMoodPage'))
+const DiaryNewWritePage = lazy(() => import('@/pages/DiaryNewWritePage'))
+const DiaryNewLoadingPage = lazy(() => import('@/pages/DiaryNewLoadingPage'))
+const ProfilePage = lazy(() => import('@/pages/ProfilePage'))
+const NotFoundPage = lazy(() => import('@/pages/NotFoundPage'))
 
 function PrivateRoute() {
   if (!tokenStorage.get()) return <Navigate to="/login" replace />

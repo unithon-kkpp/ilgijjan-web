@@ -1,7 +1,16 @@
 import { Outlet } from 'react-router-dom'
-import { useEffect, useState } from 'react'
+import { Suspense, useEffect, useState } from 'react'
 import ToastContainer from '@/shared/components/ui/ToastContainer'
 import ErrorBoundary from '@/shared/components/ErrorBoundary'
+
+/** lazy 로드된 페이지의 청크를 받는 짧은 순간 보여줄 스피너 */
+function PageLoader() {
+  return (
+    <div className="h-full flex items-center justify-center">
+      <div className="h-10 w-10 animate-spin rounded-full border-4 border-gray-200 border-t-yellow-400" />
+    </div>
+  )
+}
 
 const FRAME_W = 390
 const FRAME_H = 844
@@ -51,7 +60,9 @@ export default function MobileLayout() {
           {/* 페이지에서 throw 된 에러를 잡아 fallback UI 표시. Toast 는 가드 밖에 두어
               fallback 상태에서도 토스트가 떠 있다면 계속 보이게 함. */}
           <ErrorBoundary>
-            <Outlet />
+            <Suspense fallback={<PageLoader />}>
+              <Outlet />
+            </Suspense>
           </ErrorBoundary>
           <ToastContainer />
         </div>

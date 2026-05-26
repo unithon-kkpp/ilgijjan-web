@@ -147,6 +147,7 @@ export default function DiaryDetail({ diary, fromCreate = false }: DiaryDetailPr
                 <img
                   src={diary.imageUrl!}
                   alt=""
+                  decoding="async"
                   className="w-full h-full object-cover"
                 />
               ) : (

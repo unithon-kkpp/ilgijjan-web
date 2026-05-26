@@ -37,7 +37,7 @@ export function DiaryRow({ item, onClick }: DiaryRowProps) {
         style={{ width: 128, height: 128, backgroundColor: '#e8e8e8' }}
       >
         {item.imageUrl && (
-          <img src={item.imageUrl} alt="" className="w-full h-full object-cover" />
+          <img src={item.imageUrl} alt="" loading="lazy" decoding="async" className="w-full h-full object-cover" />
         )}
       </div>
       <div className="flex flex-col pt-3 gap-[10px]">

@@ -180,7 +180,8 @@
           </div>
 
           <!-- 모바일: 가로 스크롤 / 데스크톱: 5칸 그리드 -->
-          <ol class="flex snap-x gap-5 overflow-x-auto pb-4 sm:grid sm:grid-cols-3 sm:overflow-visible sm:pb-0 lg:grid-cols-5">
+          <!-- data-reveal-group: 부모가 화면에 들어오면 자식 .reveal 들을 한 번에 등장시킴 -->
+          <ol data-reveal-group class="flex snap-x gap-5 overflow-x-auto pb-4 sm:grid sm:grid-cols-3 sm:overflow-visible sm:pb-0 lg:grid-cols-5">
             <li class="reveal d1 w-40 shrink-0 snap-center sm:w-auto">
               <div class="relative mb-4 overflow-hidden rounded-[1.6rem] bg-white shadow-lg ring-1 ring-black/5">
                 <span class="absolute left-3 top-3 z-10 flex h-7 w-7 items-center justify-center rounded-full bg-jjan-primary text-sm font-bold text-jjan-text shadow">1</span>

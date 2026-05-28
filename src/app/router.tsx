@@ -39,10 +39,14 @@ export const router = createBrowserRouter([
       { path: '/onboarding/friends', element: <OnboardingFriendsPage /> },
 
       // 로그인 필요
+      // 루트 '/' 는 정적 랜딩(index.html)이 차지한다. 앱 안에서 navigate('/') 로
+      // 들어오는 기존 코드들이 깨지지 않도록 '/home' 으로 리다이렉트한다.
+      { path: '/', element: <Navigate to="/home" replace /> },
+
       {
         element: <PrivateRoute />,
         children: [
-          { path: '/', element: <DiaryListPage /> },
+          { path: '/home', element: <DiaryListPage /> },
           { path: '/feed', element: <PublicFeedPage /> },
           { path: '/diary/:id', element: <DiaryDetailPage /> },
           { path: '/diary/new', element: <DiaryNewEntryPage /> },

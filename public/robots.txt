@@ -1,0 +1,9 @@
+# 모든 검색엔진 크롤러 허용
+User-agent: *
+Allow: /
+
+# 로그인이 필요한 앱 화면은 내용이 없으므로 크롤링 제외 (선택)
+Disallow: /oauth/
+
+# 사이트맵 위치
+Sitemap: https://ilgijjan.vercel.app/sitemap.xml

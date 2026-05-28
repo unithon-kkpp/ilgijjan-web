@@ -1,0 +1,110 @@
+/* 랜딩 전용 스타일. 앱(src/index.css)과 별도 번들로 빌드된다. */
+
+/* 폰트 (앱과 동일) */
+@import url('https://hangeul.pstatic.net/hangeul_static/css/nanum-square-round.css');
+
+@font-face {
+  font-family: 'AndongKaturi';
+  src: url('/fonts/Katuri.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html {
+  scroll-behavior: smooth;
+}
+
+/* ── 히어로: 페이지 로드 시 1회 떠오르는 애니메이션 (순수 CSS) ─────────── */
+@keyframes landing-rise {
+  from {
+    opacity: 0;
+    transform: translateY(28px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.rise {
+  animation: landing-rise 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+.rise-1 {
+  animation-delay: 0.05s;
+}
+.rise-2 {
+  animation-delay: 0.15s;
+}
+.rise-3 {
+  animation-delay: 0.25s;
+}
+.rise-4 {
+  animation-delay: 0.35s;
+}
+
+/* ── 스크롤 등장 (토스 스타일): JS 가 켜졌을 때만 숨겼다가 나타남 ───────── */
+/* JS 가 꺼져 있으면 .reveal 요소는 그냥 보인다 → 크롤러/접근성에 안전 */
+.js .reveal {
+  opacity: 0;
+  transform: translateY(32px);
+  transition:
+    opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.js .reveal.is-visible {
+  opacity: 1;
+  transform: none;
+}
+/* 한 섹션 안에서 순서대로 등장 (계단식) */
+.js .reveal.d1 {
+  transition-delay: 0.08s;
+}
+.js .reveal.d2 {
+  transition-delay: 0.16s;
+}
+.js .reveal.d3 {
+  transition-delay: 0.24s;
+}
+.js .reveal.d4 {
+  transition-delay: 0.32s;
+}
+.js .reveal.d5 {
+  transition-delay: 0.4s;
+}
+
+/* ── 캐릭터 둥실둥실 ───────────────────────────────────────────────── */
+@keyframes float-y {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-14px);
+  }
+}
+.floaty {
+  animation: float-y 4.5s ease-in-out infinite;
+}
+.floaty-slow {
+  animation: float-y 6s ease-in-out infinite;
+}
+
+/* 모션 최소화 설정을 켠 사용자에게는 모든 애니메이션 끔 */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .rise,
+  .js .reveal,
+  .floaty,
+  .floaty-slow {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+}

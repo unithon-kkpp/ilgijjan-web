@@ -6,4 +6,4 @@ Allow: /
 Disallow: /oauth/
 
 # 사이트맵 위치
-Sitemap: https://ilgijjan.vercel.app/sitemap.xml
+Sitemap: https://www.ilgijjan.com/sitemap.xml
